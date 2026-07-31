@@ -584,7 +584,15 @@ function updateArbitro(dt) {
     if (arbitro.cartaoT <= 0) { arbitro.cartaoPend = null; arbitro.corCartao = null; arbitro.alvo = null; }
     return;
   }
-  if (!arbitro.correndo) { arbitro.tx = ball.x; arbitro.ty = ball.y; }
+  if (!arbitro.correndo) {
+    if (M.estado === 'play') { arbitro.tx = ball.x; arbitro.ty = ball.y; }
+    else {
+      // bola parada: fiscaliza de alguns passos de distância, nunca em cima da bola
+      const lado = ball.x < CX ? 1 : -1;
+      arbitro.tx = clamp(ball.x + lado * 55, FX0 + 20, FX1 - 20);
+      arbitro.ty = clamp(ball.y + 35, FY0 + 20, FY1 - 20);
+    }
+  }
   const dx = arbitro.tx - arbitro.x, dy = arbitro.ty - arbitro.y, dl = Math.hypot(dx, dy) || 1;
   const vel = arbitro.correndo ? 195 : 140;
   const f = Math.min(1, dl / 40);
@@ -595,7 +603,10 @@ function updateArbitro(dt) {
   arbitro.fase = (arbitro.fase || 0) + Math.hypot(arbitro.vx, arbitro.vy) * dt * 0.06;
   if (arbitro.correndo && dl < 26) {
     arbitro.correndo = false;
-    if (arbitro.cartaoPend) { arbitro.cartaoT = 1.3; arbitro.corCartao = arbitro.cartaoPend; somApito(); }
+    if (arbitro.cartaoPend) {
+      arbitro.cartaoT = 1.3; arbitro.corCartao = arbitro.cartaoPend; somApito();
+      particulas.push({ tipo: 'texto', texto: 'PIU!', x: arbitro.x, y: arbitro.y - 40, vx: 0, vy: -32, vida: 0.8 });
+    }
   }
 }
 
@@ -993,6 +1004,9 @@ function pararJogo(tipo, side, x, y, jaAnunciado) {
   } else if (tipo === 'lateral') {
     M.parada.mira = clamp(ball.x + (ball.x < CX ? 110 : -110), FX0 + 20, FX1 - 20);
     M.parada.loft = 90;
+  } else if (tipo === 'escanteio') {
+    M.parada.mira = CX;
+    M.parada.loft = 240;
   }
 }
 
@@ -1000,6 +1014,19 @@ function updateParada(dt) {
   const pa = M.parada; pa.timer += dt;
   const t = pa.taker;
   const gyA = golAtkY(pa.side);
+
+  // trava a bola no local da cobrança o tempo todo (corrida do cobrador +
+  // mira); só ganha velocidade de novo no chute/arremesso. Sem isso, o
+  // laço de colisão da física normal (que não roda mais aqui, mas rodava
+  // antes) empurrava a bola, o cobrador "chutava" ela sem querer ao
+  // chegar correndo, e a barreira (que mira na bola) tremia junto.
+  ball.vx = 0; ball.vy = 0; ball.vz = 0;
+  if (pa.tipo === 'lateral' && Math.hypot(pa.px - t.x, pa.py - t.y) < 12) {
+    ball.x = t.x; ball.y = t.y - 5; ball.z = 32;   // erguida nas mãos
+  } else {
+    ball.x = pa.px; ball.y = pa.py; ball.z = 0;
+  }
+
   // barreira na falta ensaiada
   if (pa.barreira) {
     const ang = Math.atan2(gyA - ball.y, CX - ball.x);
@@ -1046,10 +1073,7 @@ function updateParada(dt) {
     return;
   }
   t.vx = 0; t.vy = 0;
-  // lateral: bola erguida acima da cabeça, nas mãos
-  if (pa.tipo === 'lateral') { ball.x = t.x; ball.y = t.y - 5; ball.z = 32; ball.vz = 0; }
   const semImped = pa.tipo !== 'falta';
-  const cruzX = CX + (Math.random() - 0.5) * 120;
   const cruzY = gyA + (gyA === FY0 ? 95 : -95);
 
   if (pa.ensaiada) {           // falta ensaiada: mira, altura e barreira
@@ -1097,20 +1121,25 @@ function updateParada(dt) {
     return;
   }
 
+  // escanteio do usuário: mira livre em X + altura (Y fica no cruzamento pra área)
+  if (pa.side === 0 && pa.tipo === 'escanteio') {
+    if (keys['arrowleft'] || keys['a']) pa.mira -= 180 * dt;
+    if (keys['arrowright'] || keys['d']) pa.mira += 180 * dt;
+    if (keys['arrowup'] || keys['w']) pa.loft += 180 * dt;
+    if (keys['arrowdown'] || keys['s']) pa.loft -= 180 * dt;
+    if (joy.ativo) pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (FWID / 2 - 40);
+    pa.mira = clamp(pa.mira, FX0 + 30, FX1 - 30);
+    pa.loft = clamp(pa.loft, 60, 320);
+    if (acaoChute) chutar(t, pa.mira, cruzY, 430, semImped, pa.loft);
+    else if (acaoPasse) passar(t, semImped);
+    return;
+  }
+
   if (pa.side === 1) {
     if (pa.timer > 1.1) {
       if (pa.tipo === 'meta') chutar(t, FX0 + 70 + Math.random() * (FWID - 140), CYW + dirDe(pa.side) * 100, 620, semImped, 280);
-      else if (pa.tipo === 'escanteio') chutar(t, cruzX, cruzY, 430, semImped, 240);
+      else if (pa.tipo === 'escanteio') chutar(t, CX + (Math.random() - 0.5) * 120, cruzY, 430, semImped, 240);
       else aiPasse(t, semImped, pa.tipo === 'lateral' ? 130 : 0);
-    }
-  } else {
-    // só sobra o escanteio do usuário aqui (lateral/meta/falta já retornaram acima)
-    if (acaoChute) chutar(t, cruzX, cruzY, 430, semImped, 240);
-    else if (acaoPasse) {
-      const guarda = ctrl;
-      passar(t, semImped);
-      if (M.estado === 'parada' && pa.timer > 0.4) aiPasse(t, semImped, 0);
-      ctrl = guarda;
     }
   }
 }
@@ -1248,14 +1277,14 @@ function escolherCtrl() {
 function updatePlay(dt) {
   M.tempo += dt;
   if (M.half === 1 && !M.hidra1 && M.tempo >= HALF_LEN / 2) {
-    M.hidra1 = true; M.estado = 'hidratacao'; M.timer = 3; M.hidraTexto = '💧 PAUSA PARA HIDRATAÇÃO';
-    for (const pl of players) { pl.vx = 0; pl.vy = 0; }
+    M.hidra1 = true; M.estado = 'hidratacao'; M.timer = 4.6; M.hidraDur = 4.6; M.hidraTexto = '💧 PAUSA PARA HIDRATAÇÃO';
+    for (const pl of players) { pl.vx = 0; pl.vy = 0; pl.hidraX0 = pl.x; pl.hidraY0 = pl.y; }
     somApito();
     return;
   }
   if (M.half === 2 && !M.hidra2 && M.tempo >= HALF_LEN * 1.5) {
-    M.hidra2 = true; M.estado = 'hidratacao'; M.timer = 3; M.hidraTexto = '🥤 PAUSA PARA O LANCHE';
-    for (const pl of players) { pl.vx = 0; pl.vy = 0; }
+    M.hidra2 = true; M.estado = 'hidratacao'; M.timer = 4.6; M.hidraDur = 4.6; M.hidraTexto = '🥤 PAUSA PARA O LANCHE';
+    for (const pl of players) { pl.vx = 0; pl.vy = 0; pl.hidraX0 = pl.x; pl.hidraY0 = pl.y; }
     somApito();
     return;
   }
@@ -1287,15 +1316,41 @@ function updateJogo(dt) {
     case 'play': updatePlay(dt); break;
     case 'parada':
       updateParada(dt);
-      fisicaBola(dt);
       break;
     case 'penalti': updatePenalti(dt); break;
-    case 'hidratacao':
+    case 'hidratacao': {
       M.timer -= dt;
-      if (Math.random() < 2.2 * dt) particulas.push({ tipo: 'texto', texto: Math.random() < 0.5 ? 'GLU GLU!' : 'AAAH!',
-        x: CX + (Math.random() - 0.5) * 200, y: (M.hidra2 ? FY1 - 40 : FY0 + 40), vx: 0, vy: -25, vida: 0.9 });
-      if (M.timer <= 0) { M.estado = 'play'; somApito(); }
+      const elapsed = M.hidraDur - M.timer;
+      const T_IDA = 1.2, T_VOLTA = 1.2;
+      for (const p of players) {
+        const clusterX = p.side === 0 ? FX0 + 35 : FX1 - 35;
+        const clusterY = clamp(CYW - 150 + (p.k - 4.5) * 14, FY0 + 30, FY1 - 30);
+        let f;
+        if (elapsed < T_IDA) f = elapsed / T_IDA;
+        else if (elapsed > M.hidraDur - T_VOLTA) f = 1 - (elapsed - (M.hidraDur - T_VOLTA)) / T_VOLTA;
+        else f = 1;
+        f = clamp(f, 0, 1);
+        p.x = p.hidraX0 + (clusterX - p.hidraX0) * f;
+        p.y = p.hidraY0 + (clusterY - p.hidraY0) * f;
+        p.fase += 6 * dt;
+      }
+      // o técnico serve água/lanche pro grupo reunido na beira do campo
+      if (elapsed > T_IDA + 0.15 && elapsed < M.hidraDur - T_VOLTA) {
+        if (Math.random() < 2.4 * dt) {
+          const side = Math.random() < 0.5 ? 0 : 1;
+          const bx = side === 0 ? 68 : WW - 68;
+          particulas.push({ tipo: 'texto', texto: Math.random() < 0.5 ? '🥤' : '💧',
+            x: bx, y: CYW - 195, vx: (side === 0 ? 1 : -1) * 18, vy: 45, vida: 1.1 });
+        }
+        if (Math.random() < 1.6 * dt) particulas.push({ tipo: 'texto', texto: Math.random() < 0.5 ? 'GLU GLU!' : 'AAAH!',
+          x: (Math.random() < 0.5 ? FX0 + 35 : FX1 - 35), y: CYW - 160, vx: 0, vy: -22, vida: 0.9 });
+      }
+      if (M.timer <= 0) {
+        for (const p of players) { p.x = p.hidraX0; p.y = p.hidraY0; }
+        M.estado = 'play'; somApito();
+      }
       break;
+    }
     case 'gol':
       M.golTimer -= dt;
       for (const p of players) p.wobble = Math.abs(Math.sin(clock * 10)) * 0.8;
@@ -1533,6 +1588,11 @@ function camAlvo() {
     const gy = golAtkY(M.parada.side), s = 1.3;
     return { x: clamp((ball.x + CX) / 2, W / 2 / s, WW - W / 2 / s), y: clamp((ball.y + gy) / 2, H / 2 / s, WH - H / 2 / s), s };
   }
+  if (M && M.estado === 'hidratacao') {
+    // dá zoom out pra mostrar os dois bancos, onde o time se reúne
+    const s = Math.min(W / WW, H / 700) * 0.97;
+    return { x: CX, y: CYW - 60, s };
+  }
   const ahead = M ? dirDe(0) * 42 : 0;
   return { x: clamp(ball.x, W / 2, WW - W / 2), y: clamp(ball.y + ahead, H / 2, WH - H / 2), s: 1 };
 }
@@ -1668,6 +1728,9 @@ function drawArbitro() {
   const v = Math.hypot(arbitro.vx, arbitro.vy);
   const andando = v > 20;
   const pele = TONS[2];
+  // flourish teatral: gira rapidinho antes de apontar o cartão
+  const elapsedCartao = arbitro.cartaoT > 0 ? 1.3 - arbitro.cartaoT : 0;
+  const giro = (arbitro.cartaoT > 0 && elapsedCartao < 0.35) ? (1 - elapsedCartao / 0.35) * 6.283 : 0;
   ctx.save();
   ctx.translate(arbitro.x, arbitro.y);
   ctx.fillStyle = 'rgba(0,0,0,0.28)';
@@ -1676,6 +1739,9 @@ function drawArbitro() {
   ctx.fillStyle = '#111';
   ctx.beginPath(); ctx.ellipse(-6, R * 0.8 + passo * 0.4, 4.5, 6, 0, 0, 6.29); ctx.fill();
   ctx.beginPath(); ctx.ellipse(6, R * 0.8 - passo * 0.4, 4.5, 6, 0, 0, 6.29); ctx.fill();
+  if (giro) ctx.rotate(giro);
+  const wob = 0.05 * Math.sin(clock * (andando ? 16 : 5));   // barriguinha balançando
+  ctx.scale(1 + wob, 1 - wob);
   const grad = ctx.createRadialGradient(-4, -4, 3, 0, 0, R + 3);
   grad.addColorStop(0, '#2e2e2e'); grad.addColorStop(1, '#050505');
   ctx.fillStyle = grad;
@@ -1697,8 +1763,17 @@ function drawArbitro() {
   }
   ctx.fillStyle = pele;
   ctx.beginPath(); ctx.arc(0, -R * 1.02, 8.5, 0, 6.29); ctx.fill();
+  // careca brilhando (juiz careca é clássico!)
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.beginPath(); ctx.ellipse(-2.5, -R * 1.15, 2.6, 1.6, -0.4, 0, 6.29); ctx.fill();
   ctx.fillStyle = '#1a1a1a';
-  ctx.beginPath(); ctx.arc(0, -R * 1.09, 5.6, 3.3, 6.1); ctx.fill();
+  ctx.beginPath(); ctx.arc(0, -R * 1.09, 5.6, 3.6, 5.8); ctx.fill();
+  // bigodão
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath();
+  ctx.ellipse(-3.2, -R * 0.97, 3, 1.6, 0.3, 0, 6.29); ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(3.2, -R * 0.97, 3, 1.6, -0.3, 0, 6.29); ctx.fill();
   ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.4;
   ctx.beginPath(); ctx.moveTo(-3, -R * 0.99); ctx.lineTo(0, -R * 0.9); ctx.lineTo(3, -R * 0.99); ctx.stroke();
   ctx.fillStyle = '#eee';
