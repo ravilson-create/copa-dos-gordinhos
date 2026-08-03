@@ -120,10 +120,107 @@ const SELECOES = [
 {n:'Ajax',s:'AJA',c1:'#d2122e',c2:'#ffffff',j:'Pasveer:0|Rensch:0|Baas:0|Gaaei:0|Berghuis:0|Taylor:0|Godts:0|Akpom:4|Van den Boomen:0|Brobbey:4'},
 {n:'PSV',s:'PSV',c1:'#ed1c24',c2:'#ffffff',j:'Benítez:1|Boscagli:0|Obispo:0|Dest:3|Schouten:0|Veerman:0|Til:0|Saibari:2|Bakayoko:4|R. Pepi:1'},
 {n:'Villarreal',s:'VIL',c1:'#ffe667',c2:'#005ca9',j:'Conde:1|Foyth:1|Rafa Marín:1|Kambwala:4|Pedraza:1|Comesaña:1|Gueye:4|Baena:1|Ayoze Pérez:1|Mikautadze:1'},
-{n:'Atalanta',s:'ATA',c1:'#1e71b8',c2:'#111111',j:'Carnesecchi:0|Djimsiti:2|Hien:0|Kolasinac:1|Zappacosta:0|Ederson:2|De Roon:0|Pašalić:1|Lookman:4|Retegui:1'}
+{n:'Atalanta',s:'ATA',c1:'#1e71b8',c2:'#111111',j:'Carnesecchi:0|Djimsiti:2|Hien:0|Kolasinac:1|Zappacosta:0|Ederson:2|De Roon:0|Pašalić:1|Lookman:4|Retegui:1'},
+// ===== Premier League 2025/26 (índices 92+) =====
+{n:'Arsenal',s:'ARS',c1:'#ef0107',c2:'#063672',j:'Raya:1|White:0|Saliba:3|Gabriel Magalhães:3|Zinchenko:0|Rice:0|Ødegaard:0|Saka:4|Martinelli:3|Havertz:0'},
+{n:'Aston Villa',s:'AVL',c1:'#7a003c',c2:'#95bfe5',j:'Martínez:1|Cash:0|Konsa:3|Pau Torres:1|Digne:0|Tielemans:0|Kamara:4|McGinn:0|Rogers:0|Watkins:0'},
+{n:'Bournemouth',s:'BOU',c1:'#da291c',c2:'#111111',j:'Petrović:0|Aarons:3|Senesi:1|Zabarnyi:0|Truffert:0|Christie:0|Scott:0|Tavernier:0|Semenyo:4|Evanilson:3'},
+{n:'Brentford',s:'BRE',c1:'#e30613',c2:'#ffffff',j:'Kelleher:0|Van den Berg:0|Collins:0|Lewis-Potter:3|Jensen:0|Damsgaard:0|Nørgaard:0|Schade:3|Wissa:4|Thiago:4'},
+{n:'Brighton',s:'BHA',c1:'#0057b8',c2:'#ffffff',j:'Verbruggen:0|Lamptey:4|Van Hecke:0|Webster:0|Estupiñán:4|Baleba:4|Hinshelwood:0|Mitoma:1|Welbeck:3|Rutter:3'},
+{n:'Burnley',s:'BUR',c1:'#6c1d45',c2:'#99d6ea',j:'Dúbravka:0|Estève:0|Worrall:0|Ekdal:0|Hartman:3|Cullen:0|Laurent:0|Bruun Larsen:0|Anthony:3|Foster:4'},
+{n:'Chelsea',s:'CHE',c1:'#034694',c2:'#ffffff',j:'Sánchez:1|James:3|Colwill:0|Fofana:4|Cucurella:1|Caicedo:3|Enzo Fernández:1|Palmer:0|Neto:1|Jackson:4'},
+{n:'Crystal Palace',s:'CRY',c1:'#1b458f',c2:'#c4122e',j:'Henderson:0|Muñoz:2|Guéhi:4|Richards:0|Mitchell:4|Wharton:0|Hughes:0|Eze:4|Sarr:4|Mateta:4'},
+{n:'Everton',s:'EVE',c1:'#003399',c2:'#ffffff',j:'Pickford:0|O\'Brien:0|Tarkowski:0|Mykolenko:0|Patterson:0|Gueye:4|Doucouré:4|Garner:0|Ndiaye:4|Beto:4'},
+{n:'Fulham',s:'FUL',c1:'#ffffff',c2:'#000000',j:'Leno:0|Tete:4|Bassey:4|Andersen:0|Robinson:3|Berge:0|Lukic:0|Pereira:1|Smith Rowe:3|Iwobi:4'},
+{n:'Leeds United',s:'LEE',c1:'#ffffff',c2:'#1d428a',j:'Meslier:0|Bogle:3|Struijk:0|Rodon:0|Gudmundsson:0|Gruev:0|Ampadu:0|Aaronson:0|James:2|Piroe:0'},
+{n:'Liverpool',s:'LIV',c1:'#c8102e',c2:'#00263a',j:'Alisson:2|Bradley:0|Van Dijk:3|Konaté:4|Robertson:0|Mac Allister:0|Szoboszlai:0|Gravenberch:3|Salah:2|Gakpo:3'},
+{n:'Manchester City',s:'MCI',c1:'#6cabdd',c2:'#1c2c5b',j:'Ederson:2|Walker:3|Dias:2|Akanji:3|Aké:3|Rodri:1|Bernardo Silva:1|Foden:0|Doku:4|Haaland:0'},
+{n:'Manchester United',s:'MUN',c1:'#da291c',c2:'#ffd200',j:'Onana:4|Dalot:2|Martínez:1|De Ligt:0|Shaw:0|Mainoo:3|Casemiro:2|Bruno Fernandes:1|Garnacho:1|Højlund:0'},
+{n:'Newcastle',s:'NEW',c1:'#241f20',c2:'#ffffff',j:'Pope:0|Trippier:0|Schär:0|Botman:0|Burn:0|Guimarães:2|Tonali:0|Joelinton:2|Gordon:0|Woltemade:0'},
+{n:'Nottingham Forest',s:'NFO',c1:'#dd0000',c2:'#ffffff',j:'Sels:0|Williams:4|Murillo:2|Milenković:0|Aina:4|Anderson:0|Douglas Luiz:2|Gibbs-White:0|Elanga:4|Wood:0'},
+{n:'Sunderland',s:'SUN',c1:'#eb172b',c2:'#ffffff',j:'Roefs:0|Hume:0|Ballard:0|Hjelde:0|Reinildo:4|Rigg:0|Neil:0|Le Fée:0|Isidor:3|Mayenda:4'},
+{n:'Tottenham',s:'TOT',c1:'#ffffff',c2:'#132257',j:'Vicario:1|Porro:1|Van de Ven:0|Romero:1|Udogie:3|Bissouma:4|Bentancur:1|Maddison:0|Son:1|Solanke:0'},
+{n:'West Ham',s:'WHU',c1:'#7a263a',c2:'#1bb1e7',j:'Areola:4|Wan-Bissaka:4|Mavropanos:0|Todibo:4|Emerson:1|Souček:0|Rodríguez:1|Paquetá:1|Bowen:0|Füllkrug:0'},
+{n:'Wolverhampton',s:'WOL',c1:'#fdb913',c2:'#231f20',j:'Sá:1|Doherty:0|Mosquera:3|Agbadou:4|Gomes:1|André:2|João Gomes:2|Bellegarde:4|Hwang:1|Strand Larsen:0'},
+// ===== La Liga 2025/26 (índices 112+) =====
+{n:'Real Madrid',s:'RMA',c1:'#ffffff',c2:'#1f3a93',j:'Courtois:0|Carvajal:1|Militão:3|Rüdiger:3|Mendy:4|Tchouaméni:3|Valverde:1|Bellingham:0|Vini Jr:3|Mbappé:2'},
+{n:'Barcelona',s:'BAR',c1:'#a50044',c2:'#004d98',j:'Ter Stegen:0|Koundé:3|Araújo:1|Cubarsí:1|Balde:3|Pedri:1|De Jong:0|Gavi:1|Yamal:2|Raphinha:2'},
+{n:'Atlético de Madrid',s:'ATM',c1:'#c8102e',c2:'#1f3a93',j:'Oblak:0|Molina:1|Giménez:1|Le Normand:0|Hermoso:1|Koke:1|De Paul:1|Griezmann:0|J. Álvarez:1|Sørloth:0'},
+{n:'Villarreal',s:'VIL',c1:'#ffe667',c2:'#005ca9',j:'Conde:1|Foyth:1|Rafa Marín:1|Kambwala:4|Pedraza:1|Comesaña:1|Gueye:4|Baena:1|Ayoze Pérez:1|Mikautadze:1'},
+{n:'Athletic Bilbao',s:'ATH',c1:'#ee2523',c2:'#ffffff',j:'Simón:0|De Marcos:1|Vivian:1|Paredes:0|Berchiche:1|Vesga:0|Ruiz de Galarreta:0|Nico Williams:4|Iñaki Williams:4|Guruzeta:1'},
+{n:'Real Betis',s:'BET',c1:'#0bb363',c2:'#ffffff',j:'Valles:1|Bellerín:2|Natan:3|Bartra:1|Firpo:4|Roca:1|Cardoso:3|Altimira:1|Isco:1|Abde:2'},
+{n:'Real Sociedad',s:'RSO',c1:'#0033a0',c2:'#ffffff',j:'Remiro:1|Aramburu:0|Zubeldia:0|Elustondo:0|Rico:1|Turrientes:0|Guridi:0|Kubo:1|Fernández:1|Oyarzabal:1'},
+{n:'Mallorca',s:'MLL',c1:'#e2131b',c2:'#000000',j:'Román:1|Maffeo:1|Valjent:0|Raíllo:1|Mojica:3|Darder:1|Sánchez:1|Morlanes:1|Muriqi:1|Larin:3'},
+{n:'Celta de Vigo',s:'CEL',c1:'#8ac3ee',c2:'#ffffff',j:'Guaita:1|Mingueza:1|Domínguez:1|Starfelt:0|Alonso:1|Rodríguez:1|Sotelo:1|Cervi:1|Aspas:1|Iglesias:1'},
+{n:'Rayo Vallecano',s:'RAY',c1:'#ffffff',c2:'#e0141e',j:'Batalla:1|Ratiu:1|Mumin:4|Lejeune:0|Espino:1|Valentín:1|Ciss:4|Palazón:1|García:1|Nteka:4'},
+{n:'Osasuna',s:'OSA',c1:'#d2122e',c2:'#001a4b',j:'Herrera:1|Peña:1|Catena:1|García D.:1|Areso:1|Torró:1|Oroz:1|Gómez:1|Budimir:0|Zaragoza:1'},
+{n:'Girona',s:'GIR',c1:'#e5322d',c2:'#ffffff',j:'Gazzaniga:1|Martínez A.:1|Blind:0|Gutiérrez:1|Ricard:1|Martín I.:1|García Aleix:1|Stuani:1|Gil:1|Ruiz:1'},
+{n:'Getafe',s:'GET',c1:'#005ca9',c2:'#ffffff',j:'Soria:1|Duarte:1|Dakonam:4|Iglesias:1|Nyom:4|Milla:1|Arambarri:1|Rodríguez:1|Mayoral:1|Liso:1'},
+{n:'Sevilla',s:'SEV',c1:'#ffffff',c2:'#d2122e',j:'Nyland:0|Pedrosa:1|Badé:4|Salas:1|Marcao:3|Ñíguez:1|Sow:4|Agoumé:4|Romero:1|Adams:4'},
+{n:'Valencia',s:'VLC',c1:'#ffffff',c2:'#f4780a',j:'Rivero:1|Correia:4|Cömert:1|Gayà:1|Foulquier:4|Guerra:1|Pepelu:1|Pérez F.:1|Duro:1|López D.:1'},
+{n:'Alavés',s:'ALA',c1:'#1e50a2',c2:'#ffffff',j:'Sivera:1|Sánchez:1|Tenaglia:1|Abqar:2|Garcés:1|Blanco:1|Guevara:1|Sola:1|García:1|Martínez:1'},
+{n:'Espanyol',s:'ESY',c1:'#0a4c9c',c2:'#ffffff',j:'Pacheco:1|El Hilali:2|Cabrera:1|Gómez:1|Oliván:1|Lozano:1|Expósito:1|Aguado:1|Puado:1|Fernández R.:1'},
+{n:'Levante',s:'LVT',c1:'#1e3a8a',c2:'#c8102e',j:'Cárdenas:1|Elgezabal:1|Fuidias:1|Iosifov:1|Muñoz:1|Arriaga:4|Postigo:1|Romero:1|Eyong:4|Arnáiz:1'},
+{n:'Elche',s:'ELC',c1:'#00693e',c2:'#ffffff',j:'Peña:1|Núñez:1|González D.:1|Chuki:1|Josan:1|Valera:1|Mendoza:1|Redondo:1|Silva A.:1|Rodríguez Á.:1'},
+{n:'Real Oviedo',s:'OVI',c1:'#0b4ea2',c2:'#ffffff',j:'Escandell:1|Reina:1|Costas:1|Cardero:1|Colombatto:1|Hassan:2|Rahim:2|Viñas:1|Chaira:2|Sánchez:1'},
+// ===== Serie A 2025/26 (índices 132+) =====
+{n:'Inter de Milão',s:'INM',c1:'#0068a8',c2:'#111111',j:'Sommer:0|Pavard:1|Bastoni:0|De Vrij:0|Dumfries:4|Barella:1|Çalhanoğlu:1|Mkhitaryan:1|Thuram:4|Lautaro:1'},
+{n:'Milan',s:'ACM',c1:'#ac1f2d',c2:'#111111',j:'Maignan:4|Calabria:1|Tomori:4|Thiaw:3|Theo Hernández:1|Reijnders:0|Fofana:4|Pulisic:0|Leão:3|Morata:1'},
+{n:'Juventus',s:'JUV',c1:'#111111',c2:'#ffffff',j:'Di Gregorio:1|Kalulu:4|Bremer:2|Gatti:0|Cambiaso:0|Locatelli:0|Thuram:1|McKennie:0|Yildiz:1|Vlahović:0'},
+{n:'Napoli',s:'NAP',c1:'#12a0d7',c2:'#ffffff',j:'Meret:0|Di Lorenzo:1|Rrahmani:1|Buongiorno:0|Olivera:1|Anguissa:4|Lobotka:1|McTominay:0|Politano:1|Lukaku:4'},
+{n:'Atalanta',s:'ATA',c1:'#1e71b8',c2:'#111111',j:'Carnesecchi:0|Djimsiti:2|Hien:0|Kolasinac:1|Zappacosta:0|Ederson:2|De Roon:0|Pašalić:1|Lookman:4|Retegui:1'},
+{n:'Roma',s:'ROM',c1:'#8e1f2f',c2:'#f0bc42',j:'Svilar:1|Çelik:1|Ndicka:4|Hermoso:1|Rensch:0|Koné:4|Cristante:1|Dybala:1|Soulé:1|Dovbyk:0'},
+{n:'Lazio',s:'LAZ',c1:'#87d8f7',c2:'#ffffff',j:'Provedel:0|Marušić:1|Romagnoli:1|Gila:1|Tavares:3|Guendouzi:1|Cataldi:1|Zaccagni:0|Isaksen:0|Castellanos:1'},
+{n:'Fiorentina',s:'FIO',c1:'#5a2d81',c2:'#ffffff',j:'De Gea:1|Dodô:3|Comuzzo:0|Ranieri:0|Gosens:0|Mandragora:0|Richardson:2|Guðmundsson:0|Kean:3|Džeko:0'},
+{n:'Bologna',s:'BFC',c1:'#8a1731',c2:'#1c3f94',j:'Skorupski:0|Holm:0|Beukema:0|Lucumí:4|Erlić:0|Freuler:0|Ferguson:0|Orsolini:0|Dallinga:0|Castro:1'},
+{n:'Torino',s:'TOR',c1:'#7b1e3a',c2:'#ffffff',j:'Paleari:0|Coco:4|Maripán:1|Masina:2|Lazaro:0|Ilić:0|Linetty:0|Vlašić:0|Zapata:3|Adams:3'},
+{n:'Udinese',s:'UDI',c1:'#111111',c2:'#ffffff',j:'Sava:1|Bijol:0|Ehizibue:4|Kabasele:4|Bertola:0|Lovrić:0|Zarraga:1|Makengo:4|Thauvin:0|Davis:4'},
+{n:'Genoa',s:'GEN',c1:'#c8102e',c2:'#0033a0',j:'Leali:0|Martín:1|Vásquez:2|De Winter:0|Matturro:1|Frendrup:0|Badelj:0|Ekuban:4|Vitinha:2|Pinamonti:0'},
+{n:'Cagliari',s:'CAG',c1:'#a3123a',c2:'#001e62',j:'Caprile:0|Obert:0|Mina:4|Luperto:0|Zappa:0|Adopo:4|Gaetano:0|Piccoli:0|Pavoletti:0|Luvumbo:4'},
+{n:'Hellas Verona',s:'VER',c1:'#0a3f8f',c2:'#ffe000',j:'Montipò:0|Frese:0|Coppola:0|Magnani:0|Doig:0|Serdar:0|Suslov:1|Sarr:4|Tengstedt:0|Orban:4'},
+{n:'Parma',s:'PRM',c1:'#ffe000',c2:'#003087',j:'Suzuki:1|Bernabé:1|Balogh:0|Delprato:0|Coulibaly:4|Sohm:0|Hernani:2|Bonny:4|Mihăilă:0|Man:0'},
+{n:'Como',s:'COM',c1:'#0a3d91',c2:'#ffffff',j:'Butez:0|Moreno:1|Kempf:0|Smolčić:0|Valle:1|Paz:1|Perrone:1|Cutrone:0|Diao:4|Rodríguez:1'},
+{n:'Lecce',s:'LEC',c1:'#ffe000',c2:'#c8102e',j:'Falcone:0|Gallo:0|Gaspar:4|Baschirotto:0|Veiga:1|Ramadani:1|Coulibaly:4|Krstović:0|Pierotti:1|Esposito:0'},
+{n:'Cremonese',s:'CRE',c1:'#7d7d7d',c2:'#a8093c',j:'Audero:0|Ceccherini:0|Bianchetti:0|Lochoshvili:0|Bartolomei:0|Collocolo:0|Bondo:4|Bonazzoli:0|Sanabria:1|Vardy:0'},
+{n:'Sassuolo',s:'SAS',c1:'#00a651',c2:'#111111',j:'Turati:0|Doig:1|Romagna:0|Toljan:0|Candela:0|Thorstvedt:0|Laurienté:4|Berardi:0|Koné:4|Pinamonti:0'},
+{n:'Pisa',s:'PIS',c1:'#0033a0',c2:'#111111',j:'Šemper:0|Touré:4|Canestrelli:0|Calabresi:0|Beruatto:1|Marin:0|Bonfanti:0|Tramoni:1|Nzola:4|Moreo:1'},
+// ===== Bundesliga 2025/26 (índices 152+) =====
+{n:'Bayern de Munique',s:'BAY',c1:'#dc052d',c2:'#0f1c2e',j:'Neuer:0|Kimmich:0|Upamecano:3|Tah:3|Davies:0|Goretzka:0|Musiala:3|Sané:3|Coman:3|Kane:0'},
+{n:'Bayer Leverkusen',s:'LEV',c1:'#e2001a',c2:'#111111',j:'Hrádecký:0|Tapsoba:4|Kossounou:4|Grimaldo:1|Frimpong:4|Xhaka:1|Andrich:0|Hofmann:0|Boniface:4|Schick:0'},
+{n:'Borussia Dortmund',s:'BVB',c1:'#fde100',c2:'#111111',j:'Kobel:0|Ryerson:0|Süle:0|Anton:0|Bensebaini:2|Nmecha:4|Sabitzer:0|Brandt:0|Adeyemi:4|Guirassy:4'},
+{n:'RB Leipzig',s:'RBL',c1:'#ffffff',c2:'#dd0741',j:'Gulácsi:0|Orbán:0|Lukeba:4|Raum:0|Henrichs:0|Simons:1|Kampl:0|Baumgartner:0|Openda:4|Poulsen:4'},
+{n:'Eintracht Frankfurt',s:'SGE',c1:'#e1000f',c2:'#111111',j:'Trapp:0|Theate:0|Koch:0|Brown:4|Buta:4|Larsson:0|Uzun:1|Burkardt:0|Knauff:0|Doan:1'},
+{n:'VfB Stuttgart',s:'VFB',c1:'#ffffff',c2:'#e0001b',j:'Nübel:0|Vagnoman:4|Chabot:4|Zagadou:4|Mittelstädt:0|Stiller:0|Karazor:1|Undav:1|Führich:0|Demirović:0'},
+{n:'Freiburg',s:'SCF',c1:'#c8102e',c2:'#111111',j:'Atubolu:0|Sildillia:4|Ginter:0|Lienhart:0|Rosenfelder:0|Röhl:0|Grifo:0|Höler:0|Adamu:4|Matanović:0'},
+{n:'Werder Bremen',s:'SVW',c1:'#1d9053',c2:'#ffffff',j:'Zetterer:0|Jung:0|Friedl:0|Pieper:0|Malatini:1|Schmid:0|Weiser:0|Ducksch:0|Njinmah:4|Stage:0'},
+{n:'Wolfsburg',s:'WOB',c1:'#65b32e',c2:'#ffffff',j:'Grabara:0|Zesiger:0|Bornauw:0|Fischer:0|Svanberg:0|Gerhardt:0|Wind:0|Amoura:4|Tomás:1|Wimmer:0'},
+{n:'Borussia Mönchengladbach',s:'BMG',c1:'#111111',c2:'#ffffff',j:'Nicolas:0|Friedrich:0|Elvedi:0|Itakura:1|Chiarodia:4|Reitz:0|Stöger:0|Honorat:4|Kleindienst:0|Pléa:4'},
+{n:'Mainz 05',s:'M05',c1:'#ffffff',c2:'#c8102e',j:'Zentner:0|Hanche-Olsen:0|Bell:0|Caci:4|Kohr:0|Amiri:2|Katompa Mvumpa:4|Nebel:0|Weiper:0|Lee:1'},
+{n:'Union Berlin',s:'FCU',c1:'#eb1923',c2:'#ffe000',j:'Rønnow:0|Querfeld:0|Leite:1|Roussillon:4|Trimmel:0|Khedira:0|Kemlein:0|Hollerbach:0|Ansah:4|Vertessen:0'},
+{n:'Hoffenheim',s:'TSG',c1:'#1961b5',c2:'#ffffff',j:'Baumann:0|Akpoguma:4|Nsoki:4|Kabak:1|Vogt:0|Prömel:0|Becker:0|Kramarić:0|Bülter:0|Hložek:1'},
+{n:'Augsburg',s:'FCA',c1:'#ba3733',c2:'#ffffff',j:'Dahmen:0|Pfeiffer:0|Gouweleeuw:0|Gumny:1|Rexhbeçaj:4|Jensen:0|Jakić:0|Tietz:0|Claude-Maurice:4|Conteh:4'},
+{n:'Heidenheim',s:'FCH',c1:'#c8102e',c2:'#003087',j:'Müller:0|Theuerkauf:0|Mainka:0|Busch:0|Beck:4|Maloney:0|Ajani:4|Pieringer:0|Schimmer:0|Zyenunuh:4'},
+{n:'St. Pauli',s:'STP',c1:'#7a4b2a',c2:'#ffffff',j:'Vasilj:1|Smith:0|Wahl:0|Mets:0|Saliakas:1|Hartel:0|Saad:2|Albers:0|Sinani:1|Eggestein:0'},
+{n:'FC Köln',s:'KOE',c1:'#ed1c24',c2:'#ffffff',j:'Schwäbe:0|Hübers:0|Kilian:0|Diehl:4|Finkgräfe:0|Huseinbašić:0|Maina:4|Downs:4|El Mala:4|Thielmann:0'},
+{n:'Hamburger SV',s:'HSV',c1:'#0f1c5e',c2:'#ffffff',j:'Heuer Fernandes:0|Van Drongelen:0|Ramos:2|Muheim:0|Katterbach:0|Reis:0|Dompé:4|Glatzel:0|Königsdörffer:4|Jatta:4'}
 ];
 const N_COPA = 48;   // seleções (0..47); clubes do Brasileirão vêm depois
 const N_EURO0 = 68, N_EURO1 = 92;   // clubes europeus (68..91)
+const N_PL0 = 92, N_PL1 = 112;      // Premier League (92..111)
+const N_LL0 = 112, N_LL1 = 132;     // La Liga (112..131)
+const N_SA0 = 132, N_SA1 = 152;     // Serie A (132..151)
+const N_BL0 = 152, N_BL1 = 170;     // Bundesliga (152..169)
+
+// categorias selecionáveis no modo Amistoso
+const CATS_AMISTOSO = [
+  { label: '🌍 Seleções', ini: 0, fim: N_COPA },
+  { label: '⭐ Champions', ini: N_EURO0, fim: N_EURO1 },
+  { label: '🇧🇷 Brasileirão', ini: N_COPA, fim: N_EURO0 },
+  { label: '🦁 Premier League', ini: N_PL0, fim: N_PL1 },
+  { label: '🇪🇸 La Liga', ini: N_LL0, fim: N_LL1 },
+  { label: '🇮🇹 Serie A', ini: N_SA0, fim: N_SA1 },
+  { label: '🇩🇪 Bundesliga', ini: N_BL0, fim: N_BL1 },
+];
 
 function parseJog(s) {
   return s.split('|').map(x => {
@@ -1392,7 +1489,7 @@ function fimDePartida() {
   somApito2();
   const [ga, gb] = M.placar;
   if (modo === 'amistoso') { tela = 'fimjogo'; return; }
-  if (modo === 'brasileirao') { registrarLiga(ga, gb); tela = 'liga'; return; }
+  if (modo === 'liga') { registrarLiga(ga, gb); tela = 'liga'; return; }
   if (modo === 'champions') {
     if (champions.fase === 'grupos') { registrarGrupoChampions(ga, gb); return; }
   } else if (copa.fase === 'grupos') { registrarGrupo(ga, gb); return; }
@@ -2024,7 +2121,7 @@ function drawHUD() {
   ctx.font = '13px "Segoe UI",Arial'; ctx.fillStyle = '#ddd';
   let etiqueta = (M.half === 3 ? 'PRORROG. ' : M.half + 'T ') + mm + ':' + String(ss).padStart(2, '0');
   if (modo === 'copa') etiqueta += ' · ' + FASES[copa.fase];
-  else if (modo === 'brasileirao') etiqueta += ' · Rodada ' + (liga.rodada + 1);
+  else if (modo === 'liga') etiqueta += ' · Rodada ' + (liga.rodada + 1);
   ctx.fillText(etiqueta, W / 2, 56);
   // fôlego
   if (ctrl) {
@@ -2268,7 +2365,7 @@ function drawMenu() {
   });
   botao(90, 460, 360, 54, '🤝 AMISTOSO', () => { modo = 'amistoso'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
   botao(90, 522, 360, 54, '🏆 COPA DO MUNDO 2026', () => { modo = 'copa'; escolhendo = 'user'; tela = 'selecao'; });
-  botao(90, 584, 360, 54, '🇧🇷 BRASILEIRÃO 2026', () => { modo = 'brasileirao'; escolhendo = 'user'; tela = 'selecao'; });
+  botao(90, 584, 360, 54, '🏟️ LIGAS NACIONAIS', () => { tela = 'ligas'; });
   botao(90, 646, 360, 54, '⭐ LIGA DOS CAMPEÕES', () => { modo = 'champions'; escolhendo = 'user'; tela = 'selecao'; });
   ctx.font = '13px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.6)';
   ctx.fillText('Você joga sempre contra o computador', W / 2, 730);
@@ -2278,20 +2375,36 @@ function drawMenu() {
 
 function faixaTimes() {   // [ini, fim) de índices conforme o modo
   if (modo === 'amistoso') {
-    if (amistosoCat === 1) return [N_COPA, N_EURO0];
-    if (amistosoCat === 2) return [N_EURO0, N_EURO1];
-    return [0, N_COPA];
+    const c = CATS_AMISTOSO[amistosoCat] || CATS_AMISTOSO[0];
+    return [c.ini, c.fim];
   }
-  if (modo === 'brasileirao') return [N_COPA, N_EURO0];
+  if (modo === 'liga') return [LIGAS[ligaId].ini, LIGAS[ligaId].fim];
   if (modo === 'champions') return [N_EURO0, N_EURO1];
   return [0, N_COPA];
+}
+
+function drawLigas() {
+  fundoMenu();
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 24px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
+  ctx.fillText('🏟️ Ligas Nacionais', W / 2, 60);
+  ctx.font = '15px "Segoe UI",Arial'; ctx.fillStyle = '#cde';
+  ctx.fillText('Escolha o campeonato e jogue os pontos corridos', W / 2, 90);
+  const ids = ['br', 'pl', 'll', 'sa', 'bl'];
+  ids.forEach((id, i) => {
+    const cfg = LIGAS[id];
+    botao(90, 140 + i * 70, 360, 56, cfg.emoji + ' ' + cfg.nome, () => {
+      modo = 'liga'; ligaId = id; escolhendo = 'user'; tela = 'selecao';
+    });
+  });
+  botao(W / 2 - 110, 140 + ids.length * 70 + 20, 220, 48, 'Voltar', () => { tela = 'menu'; }, '#555');
 }
 
 function drawSelecao() {
   fundoMenu();
   ctx.textAlign = 'center';
   ctx.font = 'bold 20px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
-  const clubeLike = modo === 'brasileirao' || modo === 'champions' || (modo === 'amistoso' && amistosoCat > 0);
+  const clubeLike = modo === 'liga' || modo === 'champions' || (modo === 'amistoso' && amistosoCat > 0);
   const titulo = clubeLike
     ? (escolhendo === 'user' ? 'Escolha o seu clube' : 'Escolha o adversário')
     : (escolhendo === 'user' ? 'Escolha a sua seleção' : 'Escolha o adversário');
@@ -2299,13 +2412,13 @@ function drawSelecao() {
 
   let y0 = 58;
   if (modo === 'amistoso') {
-    const cats = [['🌍 Seleções', 0], ['🇧🇷 Brasileirão', 1], ['⭐ Champions', 2]];
-    const cw2 = 176, gap = 6, totalW = cw2 * 3 + gap * 2, x0c = W / 2 - totalW / 2;
-    cats.forEach(([label, idx]) => {
-      botao(x0c + idx * (cw2 + gap), 40, cw2, 36, label, () => { amistosoCat = idx; },
-        amistosoCat === idx ? '#e07b00' : '#2a6f4e', 'bold 12px Arial');
+    const cw2 = 127, gap = 5, porLinha = 4, totalW = cw2 * porLinha + gap * (porLinha - 1), x0c = W / 2 - totalW / 2;
+    CATS_AMISTOSO.forEach((cat, idx) => {
+      const col = idx % porLinha, lin = Math.floor(idx / porLinha);
+      botao(x0c + col * (cw2 + gap), 38 + lin * 40, cw2, 36, cat.label, () => { amistosoCat = idx; },
+        amistosoCat === idx ? '#e07b00' : '#2a6f4e', 'bold 11px Arial');
     });
-    y0 = 88;
+    y0 = 128;
   }
 
   const [ini, fim] = faixaTimes();
@@ -2340,7 +2453,7 @@ function escolheu(i) {
     selUser = i;
     if (modo === 'copa') iniciarCopa();
     else if (modo === 'champions') iniciarChampions();
-    else if (modo === 'brasileirao') iniciarLiga();
+    else if (modo === 'liga') iniciarLiga(ligaId);
     else escolhendo = 'adv';
   } else {
     selAdv = i;
@@ -2531,6 +2644,7 @@ function draw() {
   else if (tela === 'copa') drawCopa();
   else if (tela === 'champions') drawChampions();
   else if (tela === 'liga') drawLiga();
+  else if (tela === 'ligas') drawLigas();
   else if (tela === 'uniforme') drawUniforme();
   else if (tela === 'fimjogo') drawFimJogo();
 }
@@ -2875,7 +2989,7 @@ function abandonarPartida() {
     if (champions.fase === 'grupos') registrarGrupoChampions(0, 2);   // W.O.: derrota
     else avancarMataMataChampions(false);
     M = null; tela = 'champions';
-  } else if (modo === 'brasileirao' && liga && !liga.fim) {
+  } else if (modo === 'liga' && liga && !liga.fim) {
     registrarLiga(0, 2); M = null; tela = 'liga';
   } else {
     M = null; tela = 'menu';
@@ -3132,7 +3246,132 @@ ACM:3.5, BVB:3.5, JUV:3.5, NAP:3.5, TOT:3.5, MUN:3.5, LEV:3.5, BEN:3, FCP:3,
 SPO:3, PSV:3, ATA:3, AJA:2.5, VIL:2.5
 });
 
-// ================== Campeonato Brasileiro (pontos corridos) ==================
+// ================== Dados extras — Premier League / La Liga / Serie A / Bundesliga ==================
+// (clubes que já existem na Champions — ARS,CHE,LIV,MCI,MUN,TOT,RMA,BAR,ATM,VIL,INM,ACM,JUV,NAP,ATA,BAY,BVB,LEV —
+//  reaproveitam os dados já cadastrados acima pelo mesmo código)
+Object.assign(EXTRA, {
+AVL:{t:'Unai Emery:1',r:'Bizot:0|Diego Carlos:3|Onana:4|Iroegbunam:3|Sancho:3'},
+BOU:{t:'Iraola:1',r:'Neto:2|Dango Ouattara:4|Alex Jiménez:1|David Brooks:0|Enes Ünal:1'},
+BRE:{t:'Keith Andrews:0',r:'Valdimarsson:0|Ajer:0|Roerslev:0|Yarmoliuk:0|Kayode:4'},
+BHA:{t:'Fabian Hürzeler:0',r:'Steele:0|Dunk:0|Veltman:0|Gruda:1|Ayari:4'},
+BUR:{t:'Scott Parker:0',r:'Muric:2|Amdouni:2|Ramsey:0|Rodriguez:1|Zaroury:3'},
+CRY:{t:'Oliver Glasner:0',r:'Johnstone:0|Lacroix:0|Clyne:4|Devenny:0|Nketiah:4'},
+EVE:{t:'David Moyes:0',r:'Virginia:2|Keane:0|Branthwaite:0|Alcaraz:1|Barry:0'},
+FUL:{t:'Marco Silva:1',r:'Rodák:0|Diop:4|Cairney:0|Traoré:4|Jiménez:1'},
+LEE:{t:'Daniel Farke:0',r:'Darlow:0|Firpo:3|Byram:0|Longstaff:0|Calvert-Lewin:4'},
+NEW:{t:'Eddie Howe:0',r:'Ramsdale:0|Krafth:0|Livramento:3|Miley:0|Osula:4'},
+NFO:{t:'Sean Dyche:0',r:'Carlos Miguel:2|Boly:4|Toffolo:0|Yates:0|Igor Jesus:3'},
+SUN:{t:'Régis Le Bris:0',r:'Patterson:0|Alderete:2|Talbi:2|Mundle:4|Sadiki:4'},
+WHU:{t:'Nuno Espírito Santo:2',r:'Fabiański:0|Kilman:0|Summerville:4|Irving:2|Wilson:0'},
+WOL:{t:'Vítor Pereira:1',r:'Dawson:0|Toti:1|Krejčí:0|Fer López:1|N\'Diaye:4'},
+ATH:{t:'Valverde:1',r:'Ágirrezabala:0|Yeray:1|Jauregizar:0|Berenguer:1|Rego:2'},
+BET:{t:'Pellegrini:1',r:'Adrián:1|Chadi Riad:2|Diego Llorente:1|Fornals:1|Chimy Ávila:1'},
+RSO:{t:'Sergio Francisco:1',r:'Marrero:1|Pacheco:1|Aihen:1|Sucic:0|Yangel Herrera:2'},
+MLL:{t:'Arrasate:1',r:'Greif:0|Copete:1|Ábqar:2|Samu Costa:1|Robert Navarro:1'},
+CEL:{t:'Giráldez:1',r:'Radu:1|Núñez:1|Javi Rodríguez:1|Ilaix Moriba:4|Pablo Durán:1'},
+RAY:{t:'Íñigo Pérez:1',r:'Dimitrievski:0|Balliu:1|Chavarría:1|Camello:1|Diego López:1'},
+OSA:{t:'Lisci:1',r:'Aitor Fernández:1|Boyomo:4|Manu Sánchez:1|Iker Muñoz:1|Kike Barja:1'},
+GIR:{t:'Míchel:1',r:'Juan Carlos:1|David López:1|Solís:1|Vanat:0|Krejčí:0'},
+GET:{t:'Bordalás:1',r:'Ocaña:1|Rico:1|Peter Federico:2|Álex Sancris:1|Diego Rico:1'},
+SEV:{t:'Almeyda:1',r:'Vlachodimos:0|Carmona:1|Nianzou:4|Rubén Vargas:1|Suso:1'},
+VLC:{t:'Corberán:1',r:'Julen:1|Diakhaby:4|Gasiorowski:1|Danjuma:4|André Almeida:1'},
+ALA:{t:'Coudet:1',r:'Dani Martín:1|Jóver:1|Aguirregabiria:1|Guridi:1|Rebbach:2'},
+ESY:{t:'Manolo González:1',r:'Dmitrović:1|Calero:1|Cristian Gómez:1|Jofre Carreras:1|Carlos Romero:1'},
+LVT:{t:'Calero:1',r:'Reina:1|Dela Hoz:1|Doblas:1|Kochorashvili:1|Carlinhos:3'},
+ELC:{t:'Sarabia:1',r:'Dituro:1|Bigas:1|Marc Aguado:1|Mfulu:4|Nteziryayo:4'},
+OVI:{t:'Paunović:1',r:'Christian Joel:1|Rodri Tarín:1|Jimmy Giraudon:1|Nacho Vidal:1|Nedelcearu:1'},
+ROM:{t:'Gasperini:1',r:'Vasquez:1|Mancini:1|Wesley:3|El Aynaoui:2|Baldanzi:1'},
+LAZ:{t:'Sarri:1',r:'Mandas:1|Gigot:1|Pellegrini:1|Vecino:1|Noslin:4'},
+FIO:{t:'Pioli:0',r:'Terracciano:0|Pongračić:0|Fagioli:0|Ndour:3|Fazzini:0'},
+BFC:{t:'Italiano:0',r:'Ravaglia:0|Lykogiannis:0|Casale:0|Fabbian:0|Odgaard:0'},
+TOR:{t:'Baroni:0',r:'Popa:0|Tameze:4|Pedersen:0|Ilkhan:1|Njie:4'},
+UDI:{t:'Runjaić:0',r:'Padelli:0|Palma:1|Zemura:4|Buksa:0|Atta:4'},
+GEN:{t:'Vieira:4',r:'Sirigu:0|Vogliacco:0|Cornet:4|Messias:3|Colombo:0'},
+CAG:{t:'Pisacane:0',r:'Sherri:0|Palomino:1|Prati:0|Felici:0|Borrelli:0'},
+VER:{t:'Zanetti:0',r:'Perilli:0|Valentini:0|Dawidowicz:0|Kastanos:1|Bernede:0'},
+PRM:{t:'Pecchia:0',r:'Corvi:0|Circati:0|Estévez:1|Almqvist:0|Keita Baldé:4'},
+COM:{t:'Fàbregas:1',r:'Semper:0|Goldaniga:0|Van der Brempt:0|Fadera:4|Addai:4'},
+LEC:{t:'Di Francesco:0',r:'Christensen:0|Pierret:0|Kaba:4|Rafia:2|N\'Dri:4'},
+CRE:{t:'Nicola:0',r:'Fulignati:0|Sernicola:0|Payero:1|Zerbin:0|Okereke:4'},
+SAS:{t:'Grosso:0',r:'Muric:2|Idzes:0|Boloca:1|Mulattieri:0|Cheddira:4'},
+PIS:{t:'Gilardino:0',r:'Loria:0|Caracciolo:0|Piccinini:1|Meister:0|Vignato:1'},
+RBL:{t:'Zsolt Lőw:0',r:'Blaswich:0|Klostermann:0|Haidara:4|Ouédraogo:4|Baku:4'},
+SGE:{t:'Toppmöller:0',r:'Grashuis:0|Amenda:0|Chandler:4|Götze:0|Bahoya:4'},
+VFB:{t:'Hoeneß:0',r:'Bredlow:0|Rouault:4|El Khannouss:4|Leweling:0|Bilal:4'},
+SCF:{t:'Julian Schuster:0',r:'Florian Müller:0|Beste:0|Manzambi:4|Gulde:0|Kyereh:4'},
+SVW:{t:'Ole Werner:0',r:'Kinsombi:4|Bittencourt:1|Grüll:0|Schmidt:0|Agu:4'},
+WOB:{t:'Simonis:0',r:'Marius Müller:0|Bella-Kotchap:4|Skarke:0|Arnold:0|Majer:0'},
+BMG:{t:'Polanski:0',r:'Omlin:0|Scally:4|Sander:0|Weigl:0|Ito:1'},
+M05:{t:'Henriksen:0',r:'Batz:0|Copado:1|Skrzybski:0|Barkok:4|Ajorque:4'},
+FCU:{t:'Baumgart:0',r:'Luthe:0|Doekhi:4|Gießelmann:0|Ilic:0|Zivzivadze:1'},
+TSG:{t:'Ilzer:0',r:'Philipp:0|Adamyan:1|Wanner:0|Angeliño:1|Asllani:1'},
+FCA:{t:'Sandro Wagner:0',r:'Labrović:0|Giannou:1|Kade:0|Maier:0|Michel:0'},
+FCH:{t:'Frank Schmidt:0',r:'Ramaj:0|Honsak:0|Thomalla:0|Titsch-Rivero:0|Analike:4'},
+STP:{t:'Blessin:0',r:'Golz:0|Dapaah:4|Ritzka:0|Boukhalfa:2|Nemeth:1'},
+KOE:{t:'Struber:0',r:'Cavar:0|Sylla:4|Ljubičić:0|Selke:0|Bulut:1'},
+HSV:{t:'Polzin:0',r:'Schwolow:0|Elfadli:4|Bénes:0|Selke:0|Sahiti:1'}
+});
+
+Object.assign(KIT2, {
+AVL:['#95bfe5','#7a003c'],BOU:['#111111','#da291c'],BRE:['#111111','#ffe667'],BHA:['#ffffff','#0057b8'],
+BUR:['#99d6ea','#6c1d45'],CRY:['#c4122e','#1b458f'],EVE:['#ffffff','#003399'],FUL:['#000000','#ffffff'],
+LEE:['#1d428a','#ffffff'],NEW:['#ffffff','#241f20'],NFO:['#ffffff','#dd0000'],SUN:['#ffffff','#eb172b'],
+WHU:['#1bb1e7','#7a263a'],WOL:['#231f20','#fdb913'],
+ATH:['#ffffff','#ee2523'],BET:['#ffffff','#0bb363'],RSO:['#ffffff','#0033a0'],MLL:['#000000','#e2131b'],
+CEL:['#ffffff','#8ac3ee'],RAY:['#e0141e','#ffffff'],OSA:['#001a4b','#d2122e'],GIR:['#ffffff','#e5322d'],
+GET:['#ffffff','#005ca9'],SEV:['#d2122e','#ffffff'],VLC:['#f4780a','#ffffff'],ALA:['#ffffff','#1e50a2'],
+ESY:['#ffffff','#0a4c9c'],LVT:['#c8102e','#1e3a8a'],ELC:['#ffffff','#00693e'],OVI:['#ffffff','#0b4ea2'],
+ROM:['#f0bc42','#8e1f2f'],LAZ:['#ffffff','#87d8f7'],FIO:['#ffffff','#5a2d81'],BFC:['#1c3f94','#8a1731'],
+TOR:['#ffffff','#7b1e3a'],UDI:['#ffffff','#111111'],GEN:['#0033a0','#c8102e'],CAG:['#001e62','#a3123a'],
+VER:['#ffe000','#0a3f8f'],PRM:['#003087','#ffe000'],COM:['#ffffff','#0a3d91'],LEC:['#c8102e','#ffe000'],
+CRE:['#a8093c','#7d7d7d'],SAS:['#111111','#00a651'],PIS:['#111111','#0033a0'],
+RBL:['#dd0741','#ffffff'],SGE:['#111111','#e1000f'],VFB:['#e0001b','#ffffff'],SCF:['#111111','#c8102e'],
+SVW:['#ffffff','#1d9053'],WOB:['#ffffff','#65b32e'],BMG:['#ffffff','#111111'],M05:['#c8102e','#ffffff'],
+FCU:['#ffe000','#eb1923'],TSG:['#ffffff','#1961b5'],FCA:['#ffffff','#ba3733'],FCH:['#003087','#c8102e'],
+STP:['#ffffff','#7a4b2a'],KOE:['#ffffff','#ed1c24'],HSV:['#ffffff','#0f1c5e']
+});
+
+Object.assign(FLAGS, {
+AVL:['h','#7a003c','#95bfe5','#7a003c'],BOU:['h','#da291c','#111111','#da291c'],BRE:['h','#e30613','#ffffff','#e30613'],
+BHA:['v','#0057b8','#ffffff','#0057b8'],BUR:['h','#6c1d45','#99d6ea','#6c1d45'],CRY:['v','#1b458f','#c4122e','#1b458f'],
+EVE:['d','#003399','#ffffff'],FUL:['d','#ffffff','#000000'],LEE:['d','#ffffff','#1d428a'],
+NEW:['h','#241f20','#ffffff','#241f20'],NFO:['d','#dd0000','#ffffff'],SUN:['h','#eb172b','#ffffff','#eb172b'],
+WHU:['v','#7a263a','#1bb1e7','#7a263a'],WOL:['d','#fdb913','#231f20'],
+ATH:['v','#ee2523','#ffffff','#ee2523'],BET:['h','#0bb363','#ffffff','#0bb363'],RSO:['h','#0033a0','#ffffff','#0033a0'],
+MLL:['d','#e2131b','#000000'],CEL:['h','#8ac3ee','#ffffff','#8ac3ee'],RAY:['d','#ffffff','#e0141e'],
+OSA:['h','#d2122e','#001a4b','#d2122e'],GIR:['v','#e5322d','#ffffff','#e5322d'],GET:['h','#005ca9','#ffffff','#005ca9'],
+SEV:['d','#ffffff','#d2122e'],VLC:['d','#ffffff','#f4780a'],ALA:['h','#1e50a2','#ffffff','#1e50a2'],
+ESY:['h','#0a4c9c','#ffffff','#0a4c9c'],LVT:['v','#1e3a8a','#c8102e','#1e3a8a'],ELC:['h','#00693e','#ffffff','#00693e'],
+OVI:['h','#0b4ea2','#ffffff','#0b4ea2'],
+ROM:['h','#8e1f2f','#f0bc42','#8e1f2f'],LAZ:['d','#87d8f7','#ffffff'],FIO:['d','#5a2d81','#ffffff'],
+BFC:['v','#8a1731','#1c3f94','#8a1731'],TOR:['h','#7b1e3a','#ffffff','#7b1e3a'],UDI:['v','#111111','#ffffff','#111111'],
+GEN:['v','#c8102e','#0033a0','#c8102e'],CAG:['h','#a3123a','#001e62','#a3123a'],VER:['h','#0a3f8f','#ffe000','#0a3f8f'],
+PRM:['v','#ffe000','#003087','#ffe000'],COM:['d','#0a3d91','#ffffff'],LEC:['h','#ffe000','#c8102e','#ffe000'],
+CRE:['h','#7d7d7d','#a8093c','#7d7d7d'],SAS:['d','#00a651','#111111'],PIS:['h','#0033a0','#111111','#0033a0'],
+RBL:['d','#ffffff','#dd0741'],SGE:['h','#e1000f','#111111','#e1000f'],VFB:['d','#ffffff','#e0001b'],
+SCF:['v','#c8102e','#111111','#c8102e'],SVW:['h','#1d9053','#ffffff','#1d9053'],WOB:['h','#65b32e','#ffffff','#65b32e'],
+BMG:['d','#111111','#ffffff'],M05:['d','#ffffff','#c8102e'],FCU:['h','#eb1923','#ffe000','#eb1923'],
+TSG:['h','#1961b5','#ffffff','#1961b5'],FCA:['h','#ba3733','#ffffff','#ba3733'],FCH:['v','#c8102e','#003087','#c8102e'],
+STP:['d','#7a4b2a','#ffffff'],KOE:['h','#ed1c24','#ffffff','#ed1c24'],HSV:['v','#0f1c5e','#ffffff','#0f1c5e']
+});
+
+// Força aproximada por prestígio/posição habitual na tabela
+Object.assign(FORCA, {
+AVL:4, BOU:3, BRE:3, BHA:3.5, BUR:2.5, CRY:3.5, EVE:3, FUL:3, LEE:2.5, NEW:4, NFO:3.5, SUN:2.5, WHU:3, WOL:2.5,
+ATH:4, BET:3.5, RSO:3.5, MLL:2.5, CEL:2.5, RAY:2.5, OSA:2.5, GIR:2.5, GET:2.5, SEV:3, VLC:2.5, ALA:2, ESY:2.5, LVT:2, ELC:2, OVI:2,
+ROM:4, LAZ:3.5, FIO:3.5, BFC:3.5, TOR:2.5, UDI:2.5, GEN:2.5, CAG:2.5, VER:2, PRM:2.5, COM:2.5, LEC:2, CRE:2, SAS:2.5, PIS:2,
+RBL:4, SGE:3, VFB:3, SCF:2.5, SVW:2.5, WOB:2.5, BMG:2.5, M05:2.5, FCU:2.5, TSG:2.5, FCA:2, FCH:2, STP:2, KOE:2, HSV:2.5
+});
+
+// ================== Ligas de pontos corridos (Brasileirão + 4 europeias) ==================
+const LIGAS = {
+  br: { nome: 'Brasileirão 2026', emoji: '🇧🇷', ini: N_COPA, fim: N_EURO0, classif: 4, rebaixa: 4 },
+  pl: { nome: 'Premier League',   emoji: '🦁',   ini: N_PL0,  fim: N_PL1,  classif: 4, rebaixa: 3 },
+  ll: { nome: 'La Liga',          emoji: '🇪🇸',  ini: N_LL0,  fim: N_LL1,  classif: 4, rebaixa: 3 },
+  sa: { nome: 'Serie A',          emoji: '🇮🇹',  ini: N_SA0,  fim: N_SA1,  classif: 4, rebaixa: 3 },
+  bl: { nome: 'Bundesliga',       emoji: '🇩🇪',  ini: N_BL0,  fim: N_BL1,  classif: 4, rebaixa: 2 },
+};
+let ligaId = 'br';
 let liga = null;
 
 function gerarTabela(times) {
@@ -3153,12 +3392,13 @@ function gerarTabela(times) {
   return rodadas;
 }
 
-function iniciarLiga() {
+function iniciarLiga(id) {
+  const cfg = LIGAS[id];
   const times = [];
-  for (let i = N_COPA; i < N_EURO0; i++) times.push(i);
+  for (let i = cfg.ini; i < cfg.fim; i++) times.push(i);
   const tab = {};
   for (const c of times) tab[c] = { pts: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0 };
-  liga = { times, tab, fixtures: gerarTabela(times), rodada: 0, fim: null };
+  liga = { id, cfg, times, tab, fixtures: gerarTabela(times), rodada: 0, fim: null };
   tela = 'liga';
 }
 
@@ -3208,7 +3448,8 @@ function ordemLiga() {
 function fecharLiga() {
   const ordem = ordemLiga();
   const pos = ordem.indexOf(selUser) + 1;
-  liga.fim = pos === 1 ? 'campeao' : pos >= 17 ? 'rebaixado' : 'fim';
+  const n = liga.times.length, cfg = liga.cfg;
+  liga.fim = pos === 1 ? 'campeao' : pos > n - cfg.rebaixa ? 'rebaixado' : 'fim';
   liga.posFinal = pos;
 }
 
@@ -3216,23 +3457,24 @@ function drawLiga() {
   fundoMenu();
   ctx.textAlign = 'center';
   ctx.font = 'bold 22px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
-  ctx.fillText('🇧🇷 Brasileirão 2026', W / 2, 34);
+  ctx.fillText(liga.cfg.emoji + ' ' + liga.cfg.nome, W / 2, 34);
 
   if (liga.fim) {
     ctx.font = '60px Arial';
     ctx.fillText(liga.fim === 'campeao' ? '🏆' : liga.fim === 'rebaixado' ? '😱' : '🙂', W / 2, 120);
     ctx.font = 'bold 24px "Comic Sans MS","Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
     const nm = SELECOES[selUser].n;
-    ctx.fillText(liga.fim === 'campeao' ? nm + ' CAMPEÃO BRASILEIRO!' :
+    ctx.fillText(liga.fim === 'campeao' ? nm + ' CAMPEÃO!' :
       liga.fim === 'rebaixado' ? nm + ' foi REBAIXADO...' :
       nm + ' terminou em ' + liga.posFinal + 'º', W / 2, 165);
     ctx.font = '15px "Segoe UI",Arial'; ctx.fillStyle = '#cde';
     ctx.fillText(liga.fim === 'campeao' ? 'Volta olímpica com a barriga cheia de brigadeiro!' :
-      liga.fim === 'rebaixado' ? 'Série B ano que vem. Menos coxinha, mais corrida!' :
+      liga.fim === 'rebaixado' ? 'Série B (ou equivalente) ano que vem. Menos coxinha, mais corrida!' :
       'Campanha digna de um bom churrasco.', W / 2, 195);
   }
 
   const ordem = ordemLiga();
+  const n = liga.times.length, cfg = liga.cfg;
   const y0 = liga.fim ? 232 : 78, rowH = liga.fim ? 26 : 30;
   ctx.font = 'bold 11px "Segoe UI",Arial'; ctx.textAlign = 'left'; ctx.fillStyle = '#9fc';
   ctx.fillText('#   Clube', 20, y0 - 16);
@@ -3240,10 +3482,10 @@ function drawLiga() {
   ctx.fillText('J', 380, y0 - 16); ctx.fillText('SG', 430, y0 - 16); ctx.fillText('PTS', 495, y0 - 16);
   ordem.forEach((c, i) => {
     const t = liga.tab[c], y = y0 + i * rowH;
-    const zona = i < 4 ? 'rgba(90,200,120,0.16)' : i >= 16 ? 'rgba(220,80,80,0.16)' : 'rgba(255,255,255,0.05)';
+    const zona = i < cfg.classif ? 'rgba(90,200,120,0.16)' : i >= n - cfg.rebaixa ? 'rgba(220,80,80,0.16)' : 'rgba(255,255,255,0.05)';
     ctx.fillStyle = c === selUser ? 'rgba(255,209,102,0.2)' : zona;
     roundRect(14, y - rowH + 6, W - 28, rowH - 3, 6); ctx.fill();
-    ctx.fillStyle = i < 4 ? '#9f9' : i >= 16 ? '#f99' : '#ccc';
+    ctx.fillStyle = i < cfg.classif ? '#9f9' : i >= n - cfg.rebaixa ? '#f99' : '#ccc';
     ctx.font = 'bold 11px "Segoe UI",Arial'; ctx.textAlign = 'left';
     ctx.fillText((i + 1) + '', 20, y - 5);
     ctx.fillStyle = SELECOES[c].c1;
