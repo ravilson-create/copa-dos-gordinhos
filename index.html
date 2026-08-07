@@ -460,6 +460,13 @@ let acaoChute = false, acaoPasse = false, trocaManual = false;
 const joy = { ativo: false, id: null, ax: 0, ay: 0, dx: 0, dy: 0 };
 const btnChute = { x: W - 78, y: H - 105, r: 46 };
 const btnPasse = { x: W - 78, y: H - 218, r: 38 };
+// botões dedicados pra escolher o lado do goleiro na defesa de pênalti (toque) —
+// ficam fora da faixa que a câmera fechada do pênalti mostra, sem se misturar com o gol
+const btnEsq = { x: 78, y: H - 150, r: 46 };
+const btnDir = { x: W - 78, y: H - 150, r: 46 };
+function defendendoNoToque() {
+  return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.disp && M.pen.fase === 'prep';
+}
 
 addEventListener('keydown', e => {
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
@@ -484,6 +491,11 @@ canvas.addEventListener('touchstart', e => {
     const pt = posEvt(t.clientX, t.clientY);
     if (tela !== 'jogo' || (M && M.estado === 'tatica')) { clique(pt); continue; }
     if (pt.y < 54 && pt.x > W - 62) { toggleTatica(); continue; }
+    if (defendendoNoToque()) {
+      if (Math.hypot(pt.x - btnEsq.x, pt.y - btnEsq.y) < btnEsq.r + 8) { M.pen.escolha = -1; acaoChute = true; continue; }
+      if (Math.hypot(pt.x - btnDir.x, pt.y - btnDir.y) < btnDir.r + 8) { M.pen.escolha = 1; acaoChute = true; continue; }
+      continue;   // durante a defesa, só os botões ESQUERDA/DIREITA fazem algo
+    }
     if (Math.hypot(pt.x - btnChute.x, pt.y - btnChute.y) < btnChute.r + 8) { acaoChute = true; continue; }
     if (Math.hypot(pt.x - btnPasse.x, pt.y - btnPasse.y) < btnPasse.r + 8) { acaoPasse = true; continue; }
     if (pt.x < W * 0.55 && !joy.ativo) {
@@ -1483,7 +1495,7 @@ function updatePlay(dt) {
 
 function updateJogo(dt) {
   if (M.avisoT > 0) M.avisoT -= dt;
-  if (M.estado === 'play' || M.estado === 'parada' || M.estado === 'penalti' || M.estado === 'hidratacao')
+  if (M.estado === 'play' || M.estado === 'parada' || M.estado === 'penalti' || M.estado === 'hidratacao' || M.estado === 'disputa')
     updateArbitro(dt);
   switch (M.estado) {
     case 'play': updatePlay(dt); break;
@@ -2253,7 +2265,15 @@ function drawHUD() {
     ctx.font = '11px Arial'; ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
     ctx.fillText('fôlego', 14, H - 32);
   }
-  if (usaToque) {
+  if (usaToque && defendendoNoToque()) {
+    for (const b of [[btnEsq, '◀ ESQUERDA'], [btnDir, 'DIREITA ▶']]) {
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.beginPath(); ctx.arc(b[0].x, b[0].y, b[0].r, 0, 6.29); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+      ctx.fillText(b[1], b[0].x, b[0].y + 4);
+    }
+  } else if (usaToque) {
     for (const b of [[btnChute, 'CHUTE'], [btnPasse, 'PASSE']]) {
       ctx.fillStyle = 'rgba(255,255,255,0.18)';
       ctx.beginPath(); ctx.arc(b[0].x, b[0].y, b[0].r, 0, 6.29); ctx.fill();
@@ -2332,7 +2352,7 @@ function drawHUD() {
     if (M.pen.atk === 0)
       ctx.fillText(usaToque ? 'arraste p/ mirar · CHUTE bate' : '◀ ▶ mira · ESPAÇO bate', W / 2, H - 46);
     else if (M.pen.disp)
-      ctx.fillText((usaToque ? 'arraste' : '◀ ▶') + ' escolhe o lado · ESPAÇO pula!' +
+      ctx.fillText((usaToque ? 'toque ESQUERDA/DIREITA pra pular!' : '◀ ▶ escolhe o lado · ESPAÇO pula!') +
         (M.pen.escolha ? (M.pen.escolha < 0 ? ' [ESQUERDA]' : ' [DIREITA]') : ''), W / 2, H - 46);
   }
   if (M.estado === 'disputa') drawDisputa();
@@ -2462,7 +2482,7 @@ function drawJogo() {
     drawGordinho(p);
   }
   if (!bolaOk) drawBola();
-  if (M.estado === 'play' || M.estado === 'parada' || M.estado === 'penalti' || M.estado === 'hidratacao') drawArbitro();
+  if (M.estado === 'play' || M.estado === 'parada' || M.estado === 'penalti' || M.estado === 'hidratacao' || M.estado === 'disputa') drawArbitro();
   drawParticulasMundo();
   ctx.restore();
   drawConfetes();
