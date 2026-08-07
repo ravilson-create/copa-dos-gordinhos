@@ -485,7 +485,7 @@ canvas.addEventListener('touchstart', e => {
   e.preventDefault(); audioInit();
   for (const t of e.changedTouches) {
     const pt = posEvt(t.clientX, t.clientY);
-    if (tela !== 'jogo' || (M && M.estado === 'tatica')) { clique(pt); continue; }
+    if (tela !== 'jogo' || (M && (M.estado === 'tatica' || M.estado === 'treinoFim'))) { clique(pt); continue; }
     if (pt.y < 54 && pt.x > W - 62) { toggleTatica(); continue; }
     if (defendendoNoToque()) {
       // toque em qualquer ponto da metade esquerda/direita da tela já escolhe o lado e manda mergulhar —
@@ -2552,7 +2552,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v16', W - 10, H - 8);
+  ctx.fillText('v17', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
