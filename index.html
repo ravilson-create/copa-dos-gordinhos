@@ -461,7 +461,7 @@ const joy = { ativo: false, id: null, ax: 0, ay: 0, dx: 0, dy: 0 };
 const btnChute = { x: W - 78, y: H - 105, r: 46 };
 const btnPasse = { x: W - 78, y: H - 218, r: 38 };
 function defendendoNoToque() {
-  return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.disp && M.pen.fase === 'prep';
+  return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.disp && M.pen.fase === 'prep' && M.pen.apitoT <= 0;
 }
 
 addEventListener('keydown', e => {
@@ -1393,12 +1393,20 @@ function iniciarPenalti(atk, disp) {
     arbitro.tx = arbitro.x; arbitro.ty = arbitro.y; arbitro.vx = 0; arbitro.vy = 0;
   }
   M.estado = 'penalti';
-  M.pen = { atk, fase: 'prep', timer: 0, mira: CX, taker, gk, disp: !!disp, escolha: 0 };
+  M.pen = { atk, fase: 'prep', timer: 0, mira: CX, taker, gk, disp: !!disp, escolha: 0, apitoT: 0.6 };
   if (!disp) anunciar('PÊNALTI!');
 }
 
 function updatePenalti(dt) {
   const pe = M.pen; if (!pe) return;
+  if (pe.apitoT > 0) {
+    pe.apitoT -= dt;
+    if (pe.apitoT <= 0 && arbitro) {
+      somApito();
+      particulas.push({ tipo: 'texto', texto: 'PIU!', x: arbitro.x, y: arbitro.y - 40, vx: 0, vy: -32, vida: 0.8 });
+    }
+    return;   // ninguém mira/escolhe/chuta antes do apito do juiz liberar
+  }
   pe.timer += dt;
   if (pe.fase === 'prep') {
     if (pe.atk === 0) {
@@ -2355,7 +2363,9 @@ function drawHUD() {
   if (M.estado === 'gol' && (M.autor || M.golContra)) drawTelao();
   if (M.estado === 'penalti' && M.pen && M.pen.fase === 'prep') {
     ctx.font = 'bold 15px "Segoe UI",Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
-    if (M.pen.atk === 0)
+    if (M.pen.apitoT > 0) {
+      ctx.fillText('🥅 aguarde o apito do juiz...', W / 2, H - 46);
+    } else if (M.pen.atk === 0)
       ctx.fillText(usaToque ? 'arraste p/ mirar · CHUTE bate' : '◀ ▶ mira · ESPAÇO bate', W / 2, H - 46);
     else if (M.pen.disp)
       ctx.fillText((usaToque ? 'toque ESQUERDA/DIREITA pra pular!' : '◀ ▶ escolhe o lado · ESPAÇO pula!') +
@@ -2476,7 +2486,7 @@ function drawJogo() {
     ctx.beginPath(); ctx.arc(pa.mira, my, 7, 0, 6.29); ctx.fill();
     ctx.strokeStyle = '#5a3a00'; ctx.lineWidth = 2; ctx.stroke();
   }
-  if (M.estado === 'penalti' && M.pen && M.pen.fase === 'prep' && M.pen.atk === 0) {
+  if (M.estado === 'penalti' && M.pen && M.pen.fase === 'prep' && M.pen.atk === 0 && M.pen.apitoT <= 0) {
     ctx.fillStyle = 'rgba(255,220,80,0.9)';
     ctx.beginPath(); ctx.arc(M.pen.mira, golAtkY(M.pen.atk) + (golAtkY(M.pen.atk) === FY0 ? -10 : 10), 6, 0, 6.29); ctx.fill();
     ctx.strokeStyle = '#5a3a00'; ctx.lineWidth = 2; ctx.stroke();
@@ -2541,6 +2551,9 @@ function drawMenu() {
   ctx.fillText('Você joga sempre contra o computador', W / 2, 786);
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
+  ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
+  ctx.fillText('v16', W - 10, H - 8);
+  ctx.textAlign = 'center';
 }
 
 function faixaTimes() {   // [ini, fim) de índices conforme o modo
