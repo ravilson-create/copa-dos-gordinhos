@@ -460,10 +460,6 @@ let acaoChute = false, acaoPasse = false, trocaManual = false;
 const joy = { ativo: false, id: null, ax: 0, ay: 0, dx: 0, dy: 0 };
 const btnChute = { x: W - 78, y: H - 105, r: 46 };
 const btnPasse = { x: W - 78, y: H - 218, r: 38 };
-// botões dedicados pra escolher o lado do goleiro na defesa de pênalti (toque) —
-// ficam fora da faixa que a câmera fechada do pênalti mostra, sem se misturar com o gol
-const btnEsq = { x: 78, y: H - 150, r: 46 };
-const btnDir = { x: W - 78, y: H - 150, r: 46 };
 function defendendoNoToque() {
   return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.disp && M.pen.fase === 'prep';
 }
@@ -492,9 +488,11 @@ canvas.addEventListener('touchstart', e => {
     if (tela !== 'jogo' || (M && M.estado === 'tatica')) { clique(pt); continue; }
     if (pt.y < 54 && pt.x > W - 62) { toggleTatica(); continue; }
     if (defendendoNoToque()) {
-      if (Math.hypot(pt.x - btnEsq.x, pt.y - btnEsq.y) < btnEsq.r + 8) { M.pen.escolha = -1; acaoChute = true; continue; }
-      if (Math.hypot(pt.x - btnDir.x, pt.y - btnDir.y) < btnDir.r + 8) { M.pen.escolha = 1; acaoChute = true; continue; }
-      continue;   // durante a defesa, só os botões ESQUERDA/DIREITA fazem algo
+      // toque em qualquer ponto da metade esquerda/direita da tela já escolhe o lado e manda mergulhar —
+      // sem precisar acertar um botão pequeno, impossível de "errar o alvo"
+      M.pen.escolha = pt.x < W / 2 ? -1 : 1;
+      acaoChute = true;
+      continue;
     }
     if (Math.hypot(pt.x - btnChute.x, pt.y - btnChute.y) < btnChute.r + 8) { acaoChute = true; continue; }
     if (Math.hypot(pt.x - btnPasse.x, pt.y - btnPasse.y) < btnPasse.r + 8) { acaoPasse = true; continue; }
@@ -1387,6 +1385,13 @@ function iniciarPenalti(atk, disp) {
     if (p.x > BOXX0 - 20 && p.x < BOXX1 + 20 && Math.abs(p.y - golY) < BOX_D + 30)
       p.y = golY + dirDe(defSide) * (BOX_D + 60 + Math.random() * 60);
   }
+  // juiz pula direto pra perto da cobrança em vez de atravessar o campo andando
+  if (arbitro) {
+    const lado = ball.x < CX ? 1 : -1;
+    arbitro.x = clamp(ball.x + lado * 55, FX0 + 20, FX1 - 20);
+    arbitro.y = clamp(ball.y + 35, FY0 + 20, FY1 - 20);
+    arbitro.tx = arbitro.x; arbitro.ty = arbitro.y; arbitro.vx = 0; arbitro.vy = 0;
+  }
   M.estado = 'penalti';
   M.pen = { atk, fase: 'prep', timer: 0, mira: CX, taker, gk, disp: !!disp, escolha: 0 };
   if (!disp) anunciar('PÊNALTI!');
@@ -2266,13 +2271,14 @@ function drawHUD() {
     ctx.fillText('fôlego', 14, H - 32);
   }
   if (usaToque && defendendoNoToque()) {
-    for (const b of [[btnEsq, '◀ ESQUERDA'], [btnDir, 'DIREITA ▶']]) {
-      ctx.fillStyle = 'rgba(255,255,255,0.18)';
-      ctx.beginPath(); ctx.arc(b[0].x, b[0].y, b[0].r, 0, 6.29); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
-      ctx.fillText(b[1], b[0].x, b[0].y + 4);
-    }
+    // toda a metade esquerda/direita da tela é tocável (não só um botãozinho) — a faixa
+    // colorida embaixo é só uma pista visual de qual lado é qual, não delimita o toque
+    const fy = H - 130, fh = 90;
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(0, fy, W / 2 - 2, fh);
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(W / 2 + 2, fy, W / 2 - 2, fh);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 20px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('◀ ESQUERDA', W / 4, fy + fh / 2 + 7);
+    ctx.fillText('DIREITA ▶', W * 3 / 4, fy + fh / 2 + 7);
   } else if (usaToque) {
     for (const b of [[btnChute, 'CHUTE'], [btnPasse, 'PASSE']]) {
       ctx.fillStyle = 'rgba(255,255,255,0.18)';
