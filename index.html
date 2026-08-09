@@ -461,7 +461,7 @@ const joy = { ativo: false, id: null, ax: 0, ay: 0, dx: 0, dy: 0 };
 const btnChute = { x: W - 78, y: H - 105, r: 46 };
 const btnPasse = { x: W - 78, y: H - 218, r: 38 };
 function defendendoNoToque() {
-  return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.disp && M.pen.fase === 'prep' && M.pen.apitoT <= 0;
+  return M && M.estado === 'penalti' && M.pen && M.pen.atk === 1 && M.pen.fase === 'prep' && M.pen.apitoT <= 0;
 }
 
 addEventListener('keydown', e => {
@@ -1416,15 +1416,14 @@ function updatePenalti(dt) {
       pe.mira = clamp(pe.mira, GX0 + 12, GX1 - 12);
       if (acaoChute) cobraPenalti();
     } else {
-      if (pe.disp) {   // escolha o canto do seu goleiro!
-        if (keys['arrowleft'] || keys['a']) pe.escolha = -1;
-        if (keys['arrowright'] || keys['d']) pe.escolha = 1;
-        if (joy.ativo && Math.abs(joy.dx) > 20) pe.escolha = Math.sign(joy.dx);
-      }
-      if (pe.disp && pe.escolha && acaoChute) {   // ESPAÇO: joga o goleiro pro lado escolhido, na hora!
+      // escolha o canto do seu goleiro! (vale tanto num pênalti normal quanto numa disputa/treino)
+      if (keys['arrowleft'] || keys['a']) pe.escolha = -1;
+      if (keys['arrowright'] || keys['d']) pe.escolha = 1;
+      if (joy.ativo && Math.abs(joy.dx) > 20) pe.escolha = Math.sign(joy.dx);
+      if (pe.escolha && acaoChute) {   // ESPAÇO: joga o goleiro pro lado escolhido, na hora!
         pe.mira = GX0 + 14 + Math.random() * (GW - 28);
         cobraPenalti();
-      } else if (pe.timer > (pe.disp ? 2.3 : 1.3)) {
+      } else if (pe.timer > 2.3) {
         pe.mira = GX0 + 14 + Math.random() * (GW - 28);
         cobraPenalti();
       }
@@ -1451,7 +1450,7 @@ function cobraPenalti() {
   const gk = pe.gk;
   const ladoBola = alvo < CX ? -1 : 1;
   let lado;
-  if (pe.atk === 1 && pe.disp && pe.escolha) lado = pe.escolha;   // canto escolhido pelo jogador
+  if (pe.atk === 1 && pe.escolha) lado = pe.escolha;   // canto escolhido pelo jogador
   else lado = (Math.random() < (pe.atk === 1 ? 0.55 : DIF[dif].pen)) ? ladoBola : -ladoBola;
   gk.vx = lado * DIF[dif].gkVel * 1.15;
   gk.mergulho = 0.42; gk.sdx = lado; gk.sdy = 0;  // saltinho de barriga
@@ -2367,7 +2366,7 @@ function drawHUD() {
       ctx.fillText('🥅 aguarde o apito do juiz...', W / 2, H - 46);
     } else if (M.pen.atk === 0)
       ctx.fillText(usaToque ? 'arraste p/ mirar · CHUTE bate' : '◀ ▶ mira · ESPAÇO bate', W / 2, H - 46);
-    else if (M.pen.disp)
+    else
       ctx.fillText((usaToque ? 'toque ESQUERDA/DIREITA pra pular!' : '◀ ▶ escolhe o lado · ESPAÇO pula!') +
         (M.pen.escolha ? (M.pen.escolha < 0 ? ' [ESQUERDA]' : ' [DIREITA]') : ''), W / 2, H - 46);
   }
@@ -2552,7 +2551,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v17', W - 10, H - 8);
+  ctx.fillText('v19', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
