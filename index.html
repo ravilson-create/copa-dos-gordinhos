@@ -1392,6 +1392,9 @@ function iniciarPenalti(atk, disp) {
     arbitro.y = clamp(ball.y + 35, FY0 + 20, FY1 - 20);
     arbitro.tx = arbitro.x; arbitro.ty = arbitro.y; arbitro.vx = 0; arbitro.vy = 0;
   }
+  // zera o joystick de movimento: se o dedo ainda estava correndo com o jogador no
+  // instante da falta, o deslocamento antigo não pode "vazar" pra escolha do goleiro
+  joy.ativo = false; joy.dx = 0; joy.dy = 0;
   M.estado = 'penalti';
   M.pen = { atk, fase: 'prep', timer: 0, mira: CX, taker, gk, disp: !!disp, escolha: 0, apitoT: 0.6 };
   if (!disp) anunciar('PÊNALTI!');
@@ -2551,7 +2554,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v19', W - 10, H - 8);
+  ctx.fillText('v20', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
