@@ -1442,11 +1442,27 @@ function updatePenalti(dt) {
         cobraPenalti();
       }
     }
+  } else if (pe.fase === 'corrida') {
+    // fisicaJogador não roda no estado 'penalti', então movo o cobrador na mão até a bola
+    const t = pe.taker;
+    const dx = ball.x - t.x, dy = ball.y - t.y;
+    const d = Math.hypot(dx, dy) || 1;
+    if (d <= 12 || pe.timer > 0.8) {   // chegou (ou trava de segurança): chuta agora
+      t.vx = 0; t.vy = 0;
+      executaChutePenalti();
+    } else {
+      const vel = 240;
+      t.vx = dx / d * vel; t.vy = dy / d * vel;
+      t.x += t.vx * dt; t.y += t.vy * dt;
+      t.fase += vel * dt * 0.06;   // alimenta a animação de passada do desenho
+    }
   } else {
     const gk = pe.gk;
     gk.x = clamp(gk.x + gk.vx * dt, GX0 - 6, GX1 + 6);
     gk.vx *= Math.max(0, 1 - 1.5 * dt);
     if (gk.mergulho > 0) { gk.mergulho -= dt; if (gk.mergulho <= 0) gk.levant = 0.4; }
+    // follow-through da perna de chute (fisicaJogador não roda aqui pra decair sozinho)
+    if (pe.taker.kick > 0) pe.taker.kick = Math.max(0, pe.taker.kick - dt);
     fisicaBola(dt);
     if (pe.timer > 1.6 && M.estado === 'penalti') {
       if (pe.disp) resolveDisputa(false);
@@ -1455,7 +1471,13 @@ function updatePenalti(dt) {
   }
 }
 
+// confirmada a cobrança: o cobrador ainda vai CORRER até a bola antes de chutar
 function cobraPenalti() {
+  const pe = M.pen;
+  pe.fase = 'corrida'; pe.timer = 0;
+}
+
+function executaChutePenalti() {
   const pe = M.pen;
   const golY = golAtkY(pe.atk);
   let alvo = pe.mira;
@@ -2698,7 +2720,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v22', W - 10, H - 8);
+  ctx.fillText('v23', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
