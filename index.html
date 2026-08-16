@@ -379,7 +379,10 @@ function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
 function dirDe(side) { const d = side === 0 ? -1 : 1; return (M && M.inv) ? -d : d; }
 function golDefY(side) { return dirDe(side) === -1 ? FY1 : FY0; }
 function golAtkY(side) { return dirDe(side) === -1 ? FY0 : FY1; }
-function raio(p) { return p.gk ? DIF[dif].gkAlc - (p.mergulho > 0 ? 8 : 0) : R; }
+function raio(p) { return p.gk ? DIF[dif].gkAlc + (p.mergulho > 0 ? 4 : 0) : R; }
+// altura do corpo pra bola: quem está na barreira se encolhe (senão a falta nunca passa),
+// jogador de linha tem altura de peito/cabeça (abaixo do travessão, que é 42)
+function alturaCorpo(p) { return p.gk ? 55 : (p.naBarreira ? 24 : 40); }
 
 // ---------------- Montagem da partida ----------------
 function posForm(side, k) {
@@ -388,6 +391,7 @@ function posForm(side, k) {
 }
 
 const CHUTEIRAS = ['#222', '#222', '#e63946', '#1d8fe0', '#ffd166', '#f4f4f4'];
+const LUVAS = ['#f2f2f2', '#ffd166', '#4cc9f0', '#e63946', '#b5e48c'];
 function novoJog(side, k, info) {
   const h = posForm(side, k);
   return { side, k, gk: k === 0, nome: info.nome, tom: info.tom,
@@ -396,7 +400,8 @@ function novoJog(side, k, info) {
     chuteira: CHUTEIRAS[Math.floor(Math.random() * CHUTEIRAS.length)],
     x: h.x, y: h.y, vx: 0, vy: 0, fase: Math.random() * 10, wobble: 0, stamina: 1, correndo: false,
     chuteCd: 0, holdT: 0, ruidoT: 0, rx: 0, ry: 0, kick: 0, kdx: 0, kdy: 1,
-    slide: 0, sdx: 0, sdy: 0, levant: 0, desarme: 0, amarelos: 0, fora: false, lesao: 0,
+    slide: 0, sdx: 0, sdy: 0, levant: 0, desarme: 0, amarelos: 0, fora: false, lesao: 0, naBarreira: false,
+    defesa: null, defesaT: 0, luva: k === 0 ? LUVAS[Math.floor(Math.random() * LUVAS.length)] : null,
     pulo: 0, bike: 0, mergulho: 0, mergulhoCd: 0, arremesso: false, comendo: 0 };
 }
 
@@ -443,10 +448,10 @@ function iniciarTreino(iA, iB) {
 function posicionar(saida) {
   for (const p of players) {
     const h = posForm(p.side, p.k);
-    p.x = h.x; p.y = h.y; p.vx = 0; p.vy = 0; p.chuteCd = 0.5; p.lesao = 0;
+    p.x = h.x; p.y = h.y; p.vx = 0; p.vy = 0; p.chuteCd = 0.5; p.lesao = 0; p.naBarreira = false;
   }
   ball.x = CX; ball.y = CYW; ball.vx = 0; ball.vy = 0; ball.spin = 0;
-  ball.dono = null; ball.lastSide = saida; ball.autoGol = null; ball.lastKicker = null;
+  ball.dono = null; ball.lastSide = saida; ball.lastP = null; ball.autoGol = null; ball.lastKicker = null;
   offTrap = null;
   // todo mundo no próprio campo na saída de bola
   for (const p of players) {
@@ -953,12 +958,30 @@ function aiGoleiro(p, dt) {
     tx = clamp(ix, GX0 + 8, GX1 - 8);
     ty = linhaY;
     vel = DIF[dif].gkVel * M.mult[p.side];
-    // desvio lateral grande: SALTA de mão esticada!
-    if (Math.abs(tx - p.x) > 40 && p.levant <= 0 && p.mergulhoCd <= 0) {
-      p.mergulho = 0.24; p.mergulhoCd = 1.4;   // saltinho curto de barriga
-      p.sdx = Math.sign(tx - p.x); p.sdy = 0;
-      p.vx = p.sdx * DIF[dif].gkVel; p.vy = 0;
-      return;
+    // escolhe o TIPO de defesa pela distância do desvio e pela altura da bola
+    const desvio = Math.abs(tx - p.x), lado = Math.sign(tx - p.x) || 1;
+    if (p.levant <= 0 && p.mergulhoCd <= 0) {
+      if (desvio > 40) {                       // longe: mergulho de barriga, duas mãos
+        p.defesa = 'duas'; p.defesaT = 0.5;
+        p.mergulho = 0.24; p.mergulhoCd = 1.4;
+        p.sdx = lado; p.sdy = 0;
+        p.vx = lado * DIF[dif].gkVel; p.vy = 0;
+        return;
+      }
+      if (desvio > 18) {                       // meia distância: espalma de uma mão
+        p.defesa = 'uma'; p.defesaT = 0.45;
+        p.mergulho = 0.18; p.mergulhoCd = 1.1;
+        p.sdx = lado; p.sdy = 0;
+        p.vx = lado * DIF[dif].gkVel * 0.85; p.vy = 0;
+        return;
+      }
+      if (ball.z < 16) {                       // rasteira em cima dele: defesa de pé
+        p.defesa = 'pe'; p.defesaT = 0.4;
+        p.mergulhoCd = 0.8;
+        p.sdx = lado; p.sdy = 0;
+        p.vx = lado * 60; p.vy = 0;
+        return;
+      }
     }
   } else if (distGol < BOX_D && Math.hypot(ball.x - p.x, ball.y - p.y) < 160 && ball.x > BOXX0 && ball.x < BOXX1) {
     tx = ball.x; ty = ball.y; vel = DIF[dif].gkVel * 0.75;
@@ -1031,6 +1054,8 @@ function fisicaJogador(p, dt) {
   p.fase += v * dt * 0.06;
   p.wobble = Math.max(0, p.wobble - 2.5 * dt);
   p.kick = Math.max(0, (p.kick || 0) - dt);
+  if (p.naBarreira) p.naBarreira = Math.max(0, p.naBarreira - dt) || false;
+  if (p.defesaT) { p.defesaT = Math.max(0, p.defesaT - dt); if (!p.defesaT) p.defesa = null; }
   if (p === ctrl && p.stamina < 0.3 && v > 60 && Math.random() < 8 * dt)
     particulas.push({ tipo: 'suor', x: p.x + (Math.random() - 0.5) * 20, y: p.y - 30, vx: (Math.random() - 0.5) * 40, vy: -60, vida: 0.6 });
 }
@@ -1073,9 +1098,11 @@ function colisaoJogadores(dt) {
       a.wobble = 1; b.wobble = 1; somTromba();
       // trombada forte: quem dominava perde a bola
       if (a.side !== b.side && (ball.dono === a || ball.dono === b)) {
+        const quemPerdeu = ball.dono;
         ball.dono = null;
         ball.vx = (ball.x - (a.x + b.x) / 2) * 6 + (Math.random() - 0.5) * 150;
         ball.vy = (ball.y - (a.y + b.y) / 2) * 6 + (Math.random() - 0.5) * 150;
+        tocou(quemPerdeu === a ? b : a);   // ricocheteou no adversário: a posse é dele
       }
       particulas.push({ tipo: 'texto', texto: FRASES_TROMBADA[Math.floor(Math.random() * FRASES_TROMBADA.length)],
         x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 - 40, vx: 0, vy: -35, vida: 1 });
@@ -1192,7 +1219,7 @@ function fisicaBola(dt) {
   for (const p of players) {
     if (p.lesao) continue;   // machucado no chão não interage com a bola
     if (M.estado === 'penalti' && M.pen && p !== M.pen.gk && p !== M.pen.taker) continue;
-    if (ball.z > (p.gk ? 55 : 26)) continue;   // bola alta passa por cima
+    if (ball.z > alturaCorpo(p)) continue;   // só passa por cima se for mais alto que o corpo
     const rr = raio(p) + BR;
     const dx = ball.x - p.x, dy = ball.y - p.y, d = Math.hypot(dx, dy);
     if (d >= rr) continue;
@@ -1204,12 +1231,31 @@ function fisicaBola(dt) {
       if (!tocou(p)) ball.dono = p;
       return;
     }
-    if (p.gk && vBola < 195 && ball.z < 50 && ball.dono === null && Math.abs(ball.y - golDefY(p.side)) < BOX_D + 30) {
+    // só o mergulho de duas mãos (ou o goleiro parado) agarra; uma mão e pé espalmam
+    const espalma = p.gk && (p.defesa === 'uma' || p.defesa === 'pe');
+    if (p.gk && !espalma && vBola < 195 && ball.z < 50 && ball.dono === null && Math.abs(ball.y - golDefY(p.side)) < BOX_D + 30) {
       if (!tocou(p)) {
         ball.dono = p; p.holdT = 2.2; ball.vx = 0; ball.vy = 0;
         anunciar('SEGUROU!');
         somTorcida(0.1, 0.8, 700);
       }
+      return;
+    }
+    if (espalma && ball.dono === null) {
+      // espalmada: joga a bola pra fora do gol, pro lado oposto ao que ele foi
+      ball.x = p.x + nx * rr; ball.y = p.y + ny * rr;
+      const paraFora = -dirDe(p.side);
+      const lat = (p.defesa === 'uma' ? (p.sdx < 0 ? -1 : 1) : (nx < 0 ? -1 : 1));
+      const forca = Math.max(280, vBola * 0.55);
+      ball.vx = lat * forca * 0.75 + (Math.random() - 0.5) * 90;
+      ball.vy = paraFora * forca * 0.8;
+      ball.vz = Math.max(ball.vz, 90);
+      p.wobble = 1;
+      anunciar(p.defesa === 'pe' ? 'DEFENDEU DE PÉ!' : 'ESPALMOU!');
+      somTromba(); somTorcida(0.12, 0.9, 720);
+      particulas.push({ tipo: 'texto', texto: p.defesa === 'pe' ? 'PÉ!' : 'ESPALMOU!',
+        x: p.x, y: p.y - 40, vx: 0, vy: -30, vida: 0.9 });
+      tocou(p);
       return;
     }
     ball.x = p.x + nx * rr; ball.y = p.y + ny * rr;
@@ -1250,10 +1296,12 @@ function pararJogo(tipo, side, x, y, jaAnunciado) {
     if (distGol < 300) {
       M.parada.ensaiada = true;
       M.parada.mira = CX;
-      M.parada.loft = 190;
+      M.parada.loft = 205;   // meio da faixa que passa a barreira E entra sob o travessão (195-220)
+      for (const o of players) o.naBarreira = false;
       M.parada.barreira = players.filter(o => o.side !== side && !o.gk)
         .sort((x1, x2) => Math.hypot(x1.x - ball.x, x1.y - ball.y) - Math.hypot(x2.x - ball.x, x2.y - ball.y))
         .slice(0, 3);
+      for (const o of M.parada.barreira) o.naBarreira = 1.6;   // encolhidos por ~1,6s após a cobrança
     } else {
       M.parada.mira = CX;
       M.parada.loft = 150;
@@ -1268,6 +1316,7 @@ function pararJogo(tipo, side, x, y, jaAnunciado) {
     M.parada.mira = CX;
     M.parada.loft = 240;
   }
+  M.parada.loftBase = M.parada.loft;   // âncora do arrasto de altura no toque
 }
 
 function updateParada(dt) {
@@ -1338,15 +1387,18 @@ function updateParada(dt) {
 
   if (pa.ensaiada) {           // falta ensaiada: mira, altura e barreira
     if (pa.side === 1) {
-      if (pa.timer > 1.8) chutar(t, GX0 + 14 + Math.random() * (GW - 28), gyA, 500, false, 150 + Math.random() * 90);
+      if (pa.timer > 1.8) chutar(t, GX0 + 14 + Math.random() * (GW - 28), gyA, 500, false, 197 + Math.random() * 22);
     } else {
       if (keys['arrowleft'] || keys['a']) pa.mira -= 150 * dt;
       if (keys['arrowright'] || keys['d']) pa.mira += 150 * dt;
       if (keys['arrowup'] || keys['w']) pa.loft += 180 * dt;
       if (keys['arrowdown'] || keys['s']) pa.loft -= 180 * dt;
-      if (joy.ativo) pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (GW / 2 + 26);
+      if (joy.ativo) {
+        pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (GW / 2 + 26);
+        pa.loft = pa.loftBase - clamp(joy.dy / 55, -1, 1) * 130;   // arrasta pra cima = mais alto
+      }
       pa.mira = clamp(pa.mira, GX0 - 26, GX1 + 26);
-      pa.loft = clamp(pa.loft, 60, 300);
+      pa.loft = clamp(pa.loft, 60, 330);
       if (acaoChute) chutar(t, pa.mira, gyA, 500, false, pa.loft);
       else if (acaoPasse) passar(t, false);
     }
@@ -1359,7 +1411,10 @@ function updateParada(dt) {
     if (keys['arrowright'] || keys['d']) pa.mira += 170 * dt;
     if (keys['arrowup'] || keys['w']) pa.loft += 160 * dt;
     if (keys['arrowdown'] || keys['s']) pa.loft -= 160 * dt;
-    if (joy.ativo) pa.mira = pa.px + clamp(joy.dx / 55, -1, 1) * 150;
+    if (joy.ativo) {
+      pa.mira = pa.px + clamp(joy.dx / 55, -1, 1) * 150;
+      pa.loft = pa.loftBase - clamp(joy.dy / 55, -1, 1) * 110;
+    }
     pa.mira = clamp(pa.mira, FX0 + 20, FX1 - 20);
     pa.loft = clamp(pa.loft, 0, 220);
     if (acaoChute) chutar(t, pa.mira, pa.py + dirDe(pa.side) * 180, 380, semImped, pa.loft);
@@ -1373,7 +1428,10 @@ function updateParada(dt) {
     if (keys['arrowright'] || keys['d']) pa.mira += 200 * dt;
     if (keys['arrowup'] || keys['w']) pa.loft += 180 * dt;
     if (keys['arrowdown'] || keys['s']) pa.loft -= 180 * dt;
-    if (joy.ativo) pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (FWID / 2 - 40);
+    if (joy.ativo) {
+      pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (FWID / 2 - 40);
+      pa.loft = pa.loftBase - clamp(joy.dy / 55, -1, 1) * 130;
+    }
     pa.mira = clamp(pa.mira, FX0 + 30, FX1 - 30);
     pa.loft = clamp(pa.loft, 60, 320);
     if (acaoChute) chutar(t, pa.mira, gyA, pa.tipo === 'meta' ? 620 : 530, semImped, pa.loft);
@@ -1387,7 +1445,10 @@ function updateParada(dt) {
     if (keys['arrowright'] || keys['d']) pa.mira += 180 * dt;
     if (keys['arrowup'] || keys['w']) pa.loft += 180 * dt;
     if (keys['arrowdown'] || keys['s']) pa.loft -= 180 * dt;
-    if (joy.ativo) pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (FWID / 2 - 40);
+    if (joy.ativo) {
+      pa.mira = CX + clamp(joy.dx / 55, -1, 1) * (FWID / 2 - 40);
+      pa.loft = pa.loftBase - clamp(joy.dy / 55, -1, 1) * 130;
+    }
     pa.mira = clamp(pa.mira, FX0 + 30, FX1 - 30);
     pa.loft = clamp(pa.loft, 60, 320);
     if (acaoChute) chutar(t, pa.mira, cruzY, 430, semImped, pa.loft);
@@ -1846,7 +1907,7 @@ function gravarReplayFrame() {
       mergulho: p.mergulho, bike: p.bike, pulo: p.pulo, sdx: p.sdx, sdy: p.sdy,
       arremesso: p.arremesso, stamina: p.stamina, amarelos: p.amarelos, comendo: p.comendo,
       estilo: p.estilo, barba: p.barba, chuteira: p.chuteira, kick: p.kick, kdx: p.kdx, kdy: p.kdy,
-      lesao: p.lesao
+      lesao: p.lesao, defesa: p.defesa, luva: p.luva
     }))
   });
   if (replayBuf.length > 110) replayBuf.shift();   // ~3.5s de lance
@@ -2278,6 +2339,16 @@ function drawCabelo(p, costas) {
   }
 }
 
+// luva do goleiro na ponta da mão (punho + bolota)
+function drawLuva(p, x, y) {
+  if (!p.gk || !p.luva) return;
+  ctx.fillStyle = p.luva;
+  ctx.beginPath(); ctx.arc(x, y, 3.4, 0, 6.29); ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.45)'; ctx.lineWidth = 0.9; ctx.stroke();
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.beginPath(); ctx.arc(x, y + 2.6, 1.9, 0, 6.29); ctx.fill();
+}
+
 function drawGordinho(p) {
   const tc = corTime(p.side);
   const c1 = p.gk ? '#3d3d3d' : tc[0], c2 = p.gk ? '#111' : tc[1];
@@ -2316,7 +2387,11 @@ function drawGordinho(p) {
   for (const s of [-1, 1]) {
     const hx = s * 6, hy = R * 0.5;
     let fx, fy, kx, ky;
-    if (p.kick > 0 && s === ladoChute && !deitado && p.bike <= 0) {
+    if (p.defesa === 'pe' && s === (p.sdx < 0 ? -1 : 1) && !deitado) {
+      // defesa de pé: perna bem esticada pro lado da bola, corpo agachado
+      fx = hx + p.sdx * 26; fy = R * 1.08;
+      kx = (hx + fx) / 2 + p.sdx * 5; ky = (hy + fy) / 2 + 3;
+    } else if (p.kick > 0 && s === ladoChute && !deitado && p.bike <= 0) {
       // perna de chute esticada na direção da bola, com follow-through
       const kf = p.kick / 0.28;
       fx = hx + p.kdx * 15 * kf; fy = hy + p.kdy * 10 * kf + R * 0.28 - 6 * kf;
@@ -2345,17 +2420,27 @@ function drawGordinho(p) {
     // lateral: as duas mãos erguidas segurando a bola
     for (const s of [-1, 1]) {
       ctx.beginPath(); ctx.moveTo(s * R * 0.9, -3); ctx.lineTo(s * 6, -R * 1.55); ctx.stroke();
+      drawLuva(p, s * 6, -R * 1.55);
     }
+  } else if (p.mergulho > 0 && p.defesa === 'uma') {
+    // espalmada: só o braço do lado da bola vai esticado, o outro fica recolhido
+    const ld = p.sdx < 0 ? -1 : 1;
+    ctx.beginPath(); ctx.moveTo(ld * R * 0.5, -6); ctx.lineTo(ld * R * 0.85, -R * 1.95); ctx.stroke();
+    drawLuva(p, ld * R * 0.85, -R * 1.95);
+    ctx.beginPath(); ctx.moveTo(-ld * R * 0.7, -3); ctx.lineTo(-ld * R * 0.45, R * 0.2); ctx.stroke();
+    drawLuva(p, -ld * R * 0.45, R * 0.2);
   } else if (p.mergulho > 0) {
-    // braços esticados na direção do voo
+    // braços esticados na direção do voo (defesa de duas mãos)
     for (const s of [-1, 1]) {
       ctx.beginPath(); ctx.moveTo(s * R * 0.5, -6); ctx.lineTo(s * R * 0.7, -R * 1.7); ctx.stroke();
+      drawLuva(p, s * R * 0.7, -R * 1.7);
     }
   } else if (comemorando) {
     // braços erguidos em V, balançando na festa
     for (const s of [-1, 1]) {
       const b2 = Math.sin(clock * 7 + p.fase) * 2;
       ctx.beginPath(); ctx.moveTo(s * R * 0.9, -3); ctx.lineTo(s * (R * 0.85 + b2), -R * 1.5); ctx.stroke();
+      drawLuva(p, s * (R * 0.85 + b2), -R * 1.5);
     }
   } else {
     // braços com cotovelo, amplitude acompanha a passada
@@ -2365,6 +2450,7 @@ function drawGordinho(p) {
       const ex2 = ox + s * 3 + bal * 4, ey2 = oy + 9;
       const hx2 = ex2 - s * 1 + bal * 6, hy2 = ey2 + 8 - Math.max(0, bal) * 8;
       ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ex2, ey2); ctx.lineTo(hx2, hy2); ctx.stroke();
+      drawLuva(p, hx2, hy2);
     }
   }
   // camisa (o barrigão) — gradiente cacheado
@@ -2662,9 +2748,9 @@ function drawHUD() {
     ctx.font = 'bold 15px "Segoe UI",Arial'; ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
     if (M.parada.ensaiada)
-      ctx.fillText(usaToque ? 'arraste p/ mirar · CHUTE cobra' : '◀ ▶ mira · ▲▼ altura · ESPAÇO cobra por cima da barreira', W / 2, H - 46);
+      ctx.fillText(usaToque ? 'arraste: lados = mira · cima/baixo = altura · CHUTE cobra' : '◀ ▶ mira · ▲▼ altura · ESPAÇO cobra por cima da barreira', W / 2, H - 46);
     else if (M.parada.tipo === 'lateral' || M.parada.tipo === 'meta' || M.parada.tipo === 'falta')
-      ctx.fillText(usaToque ? 'arraste p/ mirar · CHUTE lança' : '◀ ▶ mira · ▲▼ altura · ESPAÇO lança', W / 2, H - 46);
+      ctx.fillText(usaToque ? 'arraste: lados = mira · cima/baixo = altura · CHUTE lança' : '◀ ▶ mira · ▲▼ altura · ESPAÇO lança', W / 2, H - 46);
     else
       ctx.fillText(usaToque ? 'CHUTE cruza · PASSE toca' : 'ESPAÇO cruza · X passa', W / 2, H - 46);
   }
@@ -2883,7 +2969,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v25', W - 10, H - 8);
+  ctx.fillText('v26', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
@@ -3520,10 +3606,29 @@ function drawTrajetoria() {
   const pa = M.parada;
   const gy = golAtkY(0);
   const d = Math.hypot(pa.mira - ball.x, gy - ball.y) || 1;
+  // altura da barreira e a que distância ela está, pra saber se a curva passa
+  const alvB = (pa.barreira || []).filter(o => !o.fora);
+  const hB = 24, distB = alvB.length
+    ? Math.min(...alvB.map(o => Math.hypot(o.x - ball.x, o.y - ball.y))) - (R + BR) : 0;
+  // simula a parábola uma vez pra decidir a cor (bate na barreira ou passa)
+  let passa = true, zNaBarreira = 0;
+  if (distB > 0) {
+    let px2 = ball.x, py2 = ball.y, pz = 2, pvz = pa.loft;
+    let pvx = (pa.mira - ball.x) / d * 500, pvy = (gy - ball.y) / d * 500;
+    for (let i = 0; i < 200; i++) {
+      const st = 0.012;
+      px2 += pvx * st; py2 += pvy * st;
+      pz += pvz * st; pvz -= 620 * st;
+      const fr = Math.max(0, 1 - 0.15 * st); pvx *= fr; pvy *= fr;
+      if (Math.hypot(px2 - ball.x, py2 - ball.y) >= distB) { zNaBarreira = pz; break; }
+      if (pz < 0) break;
+    }
+    passa = zNaBarreira > hB;
+  }
+  const cor = !alvB.length ? 'rgba(255,220,80,' : (passa ? 'rgba(120,240,140,' : 'rgba(255,110,110,');
   let x = ball.x, y = ball.y;
   let vx = (pa.mira - ball.x) / d * 500, vy = (gy - ball.y) / d * 500;
-  let z = 0, vz = pa.loft;
-  ctx.fillStyle = 'rgba(255,220,80,0.9)';
+  let z = 2, vz = pa.loft;   // o chute real começa em z=2, igual a chutar()
   for (let i = 0; i < 44; i++) {
     const st = 0.035;
     x += vx * st; y += vy * st;
@@ -3531,10 +3636,18 @@ function drawTrajetoria() {
     if (z < 0) break;
     const fr = Math.max(0, 1 - 0.15 * st);
     vx *= fr; vy *= fr;
-    ctx.globalAlpha = Math.max(0.2, 1 - i / 40);
+    ctx.fillStyle = cor + Math.max(0.2, 1 - i / 40).toFixed(2) + ')';
     ctx.beginPath(); ctx.arc(x, y - z * 0.55, 3.2, 0, 6.29); ctx.fill();
   }
   ctx.globalAlpha = 1;
+  // marca a altura da barreira: risco na cabeça dos que formam a barreira
+  for (const o of alvB) {
+    ctx.strokeStyle = passa ? 'rgba(120,240,140,0.95)' : 'rgba(255,110,110,0.95)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(o.x - R, o.y - hB * 0.55); ctx.lineTo(o.x + R, o.y - hB * 0.55);
+    ctx.stroke();
+  }
   ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(pa.mira, gy, 8, 0, 6.29); ctx.stroke();
 }
