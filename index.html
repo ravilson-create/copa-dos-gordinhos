@@ -2342,11 +2342,15 @@ function drawCabelo(p, costas) {
 // luva do goleiro na ponta da mão (punho + bolota)
 function drawLuva(p, x, y) {
   if (!p.gk || !p.luva) return;
+  // save/restore obrigatório: os braços são desenhados num laço e o contorno da
+  // luva sobrescrevia strokeStyle/lineWidth, deixando o 2º braço preto (invisível)
+  ctx.save();
   ctx.fillStyle = p.luva;
   ctx.beginPath(); ctx.arc(x, y, 3.4, 0, 6.29); ctx.fill();
   ctx.strokeStyle = 'rgba(0,0,0,0.45)'; ctx.lineWidth = 0.9; ctx.stroke();
   ctx.fillStyle = 'rgba(0,0,0,0.25)';
   ctx.beginPath(); ctx.arc(x, y + 2.6, 1.9, 0, 6.29); ctx.fill();
+  ctx.restore();
 }
 
 function drawGordinho(p) {
@@ -2969,7 +2973,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v26', W - 10, H - 8);
+  ctx.fillText('v27', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
