@@ -2,8 +2,15 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Copa dos Gordinhos 2026 ⚽</title>
+<meta name="description" content="Futebol vertical com 188 times, Copa do Mundo, ligas nacionais e treino de pênaltis.">
+<meta name="theme-color" content="#0d2818">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Copa dos Gordinhos">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ffd166'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%23111'/%3E%3C/svg%3E">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; background:#0d2818; display:flex; align-items:center; justify-content:center; overflow:hidden; font-family:'Segoe UI',Arial,sans-serif; touch-action:none; }
@@ -25,6 +32,25 @@
 // formato: 'Nome:tomDePele' (0=claro ... 4=escuro)
 const TONS = ['#ffdbac','#f1c27d','#d9995f','#8d5524','#4e2e1e'];
 const CABELO = ['#2a1a10','#0e0e0e','#5b3a1a','#d9b45b','#777'];
+
+// ============================================================================
+// PLACAS DE PUBLICIDADE DO ESTÁDIO  —  espaço vendável
+// ----------------------------------------------------------------------------
+// Aparecem 6 por vez, nas duas laterais do campo (12 placas visíveis), e giram
+// a cada partida. Basta acrescentar entradas aqui: com mais de 6, os patrocínios
+// se revezam entre as partidas, então dá pra vender mais cotas do que slots.
+//   texto  = o que aparece na placa (deixe curto: cabe ~18 caracteres)
+//   fundo  = cor da placa      cor = cor do texto
+// ============================================================================
+const PATROCINIOS = [
+  { texto: 'PASTEL DA COPA',      fundo: '#ffd166', cor: '#333' },
+  { texto: 'GUARANÁ DO ZAGUEIRO', fundo: '#f2f2f2', cor: '#333' },
+  { texto: 'AÇAÍ DO CRAQUE',      fundo: '#ffd166', cor: '#333' },
+  { texto: 'PIPOCA DO TITE',      fundo: '#f2f2f2', cor: '#333' },
+  { texto: 'X-BURGUER DO 9',      fundo: '#ffd166', cor: '#333' },
+  { texto: 'SORVETE DO VAR',      fundo: '#f2f2f2', cor: '#333' }
+];
+let patroGiro = 0;   // avança a cada partida pra revezar as cotas
 
 const SELECOES = [
 {n:'Brasil',s:'BRA',c1:'#ffdc00',c2:'#009c3b',j:'Alisson:1|Danilo:2|Marquinhos:2|Gabriel:3|Wesley:3|Casemiro:2|Bruno G.:2|Raphinha:2|Vini Jr:3|Neymar:2'},
@@ -359,6 +385,68 @@ let modo = 'amistoso';
 let formEscolhida = '4-3-2';
 let selUser = 0, selAdv = 1;
 let kitUser = 0, jogoPend = null;
+
+// ---------------- Save (localStorage) ----------------
+// Guarda preferências, estatísticas e a compra "sem anúncios". Tolerante a
+// falha: se o navegador bloquear o armazenamento (aba anônima, cookies off),
+// o jogo continua funcionando normalmente, só não lembra nada.
+const SAVE_KEY = 'copaGordinhos.v1';
+const saveVazio = () => ({
+  dif: 1, form: '4-3-2', kit: 0, timeFav: -1,
+  partidas: 0, vitorias: 0, empates: 0, derrotas: 0, golsPro: 0, golsContra: 0,
+  treinos: 0, semAnuncios: false, partidasDesdeAd: 0
+});
+let save = saveVazio();
+let saveOk = true;
+
+function carregarSave() {
+  try {
+    const cru = localStorage.getItem(SAVE_KEY);
+    if (cru) save = Object.assign(saveVazio(), JSON.parse(cru));
+  } catch (e) { saveOk = false; }
+  dif = clamp(save.dif | 0, 0, DIF.length - 1);
+  if (FORMS[save.form]) formEscolhida = save.form;
+  kitUser = save.kit ? 1 : 0;
+}
+
+function gravarSave() {
+  if (!saveOk) return;
+  save.dif = dif; save.form = formEscolhida; save.kit = kitUser;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }
+  catch (e) { saveOk = false; }
+}
+
+// ---------------- Anúncios: decisão (o SDK entra só no app Android) ----------------
+// Função PURA: recebe o contexto e devolve o que deveria acontecer. Fica assim
+// pra poder testar a regra sem depender do AdMob, que não roda no navegador.
+//   ponto: 'fimPartida' | 'fimTreino' | 'intervalo'
+// Regras: quem comprou "sem anúncios" nunca vê nada; recompensado é sempre
+// opcional (o jogador escolhe); intersticial tem trava de 1 a cada 3 partidas
+// e nunca aparece antes do replay do gol.
+const AD_INTERVALO_PARTIDAS = 3;
+function decidirAnuncio(ponto, st) {
+  st = st || save;
+  if (st.semAnuncios) return { tipo: 'nenhum', motivo: 'comprou sem anúncios' };
+  if (ponto === 'fimTreino') return { tipo: 'recompensado', rotulo: 'Treinar de novo' };
+  if (ponto === 'fimPartida') return { tipo: 'recompensado', rotulo: 'Rever o replay' };
+  if (ponto === 'intervalo') {
+    if ((st.partidasDesdeAd || 0) < AD_INTERVALO_PARTIDAS)
+      return { tipo: 'nenhum', motivo: 'trava de frequência' };
+    return { tipo: 'intersticial' };
+  }
+  return { tipo: 'nenhum', motivo: 'ponto sem anúncio' };
+}
+// chamada depois que um intersticial realmente aparece
+function anuncioMostrado() { save.partidasDesdeAd = 0; gravarSave(); }
+
+// registra o resultado de uma partida nas estatísticas acumuladas
+function registrarEstatistica(ga, gb) {
+  save.partidas++;
+  save.golsPro += ga; save.golsContra += gb;
+  if (ga > gb) save.vitorias++; else if (ga < gb) save.derrotas++; else save.empates++;
+  save.partidasDesdeAd++;
+  gravarSave();
+}
 let escolhendo = 'user';
 let amistosoCat = 0;   // 0=seleções, 1=Brasileirão, 2=Champions (só no amistoso)
 let copa = null;
@@ -427,6 +515,7 @@ function iniciarPartida(iA, iB) {
   particulas = []; confetes = []; faltaCd = 2;
   posicionar(0);
   perfilar();
+  patroGiro = (patroGiro + 6) % (PATROCINIOS.length || 1);   // reveza as cotas a cada partida
   prepararMundo();
   tela = 'jogo';
   tocarHino(SELECOES[iB].s);
@@ -1763,6 +1852,7 @@ function updateJogo(dt) {
 function fimDePartida() {
   somApito2();
   const [ga, gb] = M.placar;
+  registrarEstatistica(ga, gb);
   if (modo === 'amistoso') { tela = 'fimjogo'; return; }
   if (modo === 'liga') { registrarLiga(ga, gb); tela = 'liga'; return; }
   if (modo === 'champions') {
@@ -1795,7 +1885,7 @@ function updateDisputa(dt) {
   D.timer -= dt;
   if (D.timer > 0) return;
   if (D.fim) {
-    if (M.treino) { M.estado = 'treinoFim'; return; }
+    if (M.treino) { M.estado = 'treinoFim'; save.treinos++; gravarSave(); return; }
     avancarFaseAtual(D.venceu === 0); return;
   }
   iniciarPenalti(D.vez, true);   // próxima cobrança, valendo!
@@ -2027,16 +2117,21 @@ function prepararMundo() {
     }
     g.globalAlpha = 1;
   }
-  // placas de publicidade
-  const ads = ['PASTEL DA COPA', 'GUARANÁ DO ZAGUEIRO', 'AÇAÍ DO CRAQUE', 'PIPOCA DO TITE', 'X-BURGUER DO 9', 'SORVETE DO VAR'];
-  g.font = 'bold 11px Arial'; g.textAlign = 'center';
+  // placas de publicidade (lidas de PATROCINIOS, revezando a cada partida)
+  g.textAlign = 'center';
+  const nPat = PATROCINIOS.length || 1;
   for (let i = 0; i < 6; i++) {
+    const pat = PATROCINIOS[(patroGiro + i) % nPat] || { texto: '', fundo: '#f2f2f2', cor: '#333' };
+    const cw = (FWID + 40) / 6, bx = FX0 - 20 + i * cw;
+    // encolhe a fonte se o nome do patrocinador for comprido, pra não vazar da placa
+    let fs = 11;
+    g.font = 'bold ' + fs + 'px Arial';
+    while (fs > 7 && g.measureText(pat.texto).width > cw - 10) { fs -= 0.5; g.font = 'bold ' + fs + 'px Arial'; }
     for (const yy of [FY0 - 32, FY1 + 14]) {
-      const cw = (FWID + 40) / 6, bx = FX0 - 20 + i * cw;
-      g.fillStyle = i % 2 ? '#f2f2f2' : '#ffd166';
+      g.fillStyle = pat.fundo || '#f2f2f2';
       g.fillRect(bx + 2, yy, cw - 4, 18);
-      g.fillStyle = '#333';
-      g.fillText(ads[i], bx + cw / 2, yy + 13);
+      g.fillStyle = pat.cor || '#333';
+      g.fillText(pat.texto, bx + cw / 2, yy + 13);
     }
   }
   // gramado em xadrez + textura
@@ -2961,7 +3056,7 @@ function drawMenu() {
   ctx.font = 'bold 16px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
   ctx.fillText('Dificuldade:', W / 2, 370);
   DIF.forEach((d, i) => {
-    botao(60 + i * 145, 390, 130, 46, d.nome, () => { dif = i; }, i === dif ? '#e07b00' : '#2a6f4e');
+    botao(60 + i * 145, 390, 130, 46, d.nome, () => { dif = i; gravarSave(); }, i === dif ? '#e07b00' : '#2a6f4e');
   });
   botao(90, 460, 360, 54, '🤝 AMISTOSO', () => { modo = 'amistoso'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
   botao(90, 522, 360, 54, '🏆 COPA DO MUNDO 2026', () => { modo = 'copa'; escolhendo = 'user'; tela = 'selecao'; });
@@ -2973,7 +3068,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v27', W - 10, H - 8);
+  ctx.fillText('v28', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
@@ -3261,6 +3356,7 @@ function loop(agora) {
   draw();
   requestAnimationFrame(loop);
 }
+carregarSave();          // preferências salvas antes do primeiro quadro
 requestAnimationFrame(loop);
 
 // ================== RESERVAS E TÉCNICOS (aprox. das convocações) ==================
@@ -3552,7 +3648,7 @@ function drawTatica() {
   ctx.font = 'bold 15px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
   ctx.fillText('Formação:', W / 2, 82);
   Object.keys(FORMS).forEach((f, i) => {
-    botao(28 + i * 124, 96, 112, 40, f, () => { M.formA = f; formEscolhida = f; },
+    botao(28 + i * 124, 96, 112, 40, f, () => { M.formA = f; formEscolhida = f; gravarSave(); },
       f === M.formA ? '#e07b00' : '#2a6f4e', 'bold 15px Arial');
   });
   ctx.textAlign = 'left';
@@ -3790,7 +3886,7 @@ function drawUniforme() {
       ctx.font = '13px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
       ctx.fillText('✓ escolhido', x + w / 2, y + 272);
     }
-    botoes.push({ x, y, w, h, cb: () => { kitUser = n; } });
+    botoes.push({ x, y, w, h, cb: () => { kitUser = n; gravarSave(); } });
   }
 
   // preview do adversário (uniforme anti-conflito automático)
