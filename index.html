@@ -489,7 +489,7 @@ function novoJog(side, k, info) {
     x: h.x, y: h.y, vx: 0, vy: 0, fase: Math.random() * 10, wobble: 0, stamina: 1, correndo: false,
     chuteCd: 0, holdT: 0, ruidoT: 0, rx: 0, ry: 0, kick: 0, kdx: 0, kdy: 1,
     slide: 0, sdx: 0, sdy: 0, levant: 0, desarme: 0, amarelos: 0, fora: false, lesao: 0, naBarreira: false,
-    defesa: null, defesaT: 0, luva: k === 0 ? LUVAS[Math.floor(Math.random() * LUVAS.length)] : null,
+    defesa: null, defesaT: 0, mergVel: 0, gkErro: 0, gkLendo: 0, luva: k === 0 ? LUVAS[Math.floor(Math.random() * LUVAS.length)] : null,
     pulo: 0, bike: 0, mergulho: 0, mergulhoCd: 0, arremesso: false, comendo: 0 };
 }
 
@@ -1015,6 +1015,26 @@ function aiLinha(p, dt) {
 }
 
 // ---------------- Goleiro ágil ----------------
+// Onde a bola vai cruzar a linha do gol? Integra com o mesmo atrito e a mesma
+// gravidade da física real — a conta antiga usava velocidade constante e errava
+// o alvo em dezenas de pixels nos chutes de longe.
+function preverBolaNaLinha(linhaY) {
+  let x = ball.x, y = ball.y, vx = ball.vx, vy = ball.vy, z = ball.z, vz = ball.vz;
+  const st = 1 / 120;
+  for (let i = 0; i < 300; i++) {
+    const yAnt = y;
+    x += vx * st; y += vy * st;
+    if (z > 0 || vz > 0) {
+      z += vz * st; vz -= 620 * st;
+      if (z <= 0) { z = 0; vz = vz < -80 ? -vz * 0.45 : 0; }
+    }
+    const fr = Math.max(0, 1 - (z > 4 ? 0.15 : 0.7) * st);
+    vx *= fr; vy *= fr;
+    if ((yAnt - linhaY) * (y - linhaY) <= 0) return { x, z, t: (i + 1) * st };
+  }
+  return null;
+}
+
 function aiGoleiro(p, dt) {
   if (p.mergulho > 0) return;   // voando, sem novo comando
   const linhaY = golDefY(p.side) + dirDe(p.side) * 14;
@@ -1039,29 +1059,45 @@ function aiGoleiro(p, dt) {
   const vBola = Math.hypot(ball.vx, ball.vy);
   let tx, ty, vel;
   // a bola cruzaria a linha dentro do gol? (senão, nada de mergulho à toa)
-  const tAr = Math.abs((linhaY - ball.y) / (ball.vy || 1));
-  const ix = ball.x + ball.vx * tAr;
-  // só arrisca o salto se a bola já estiver dentro/perto da PEQUENA área
-  const rumoAoGol = !ball.dono && vindo && vBola > 330 && tAr < 0.4 && ix > GX0 - 16 && ix < GX1 + 16;
+  const prev = (!ball.dono && vindo && vBola > 260) ? preverBolaNaLinha(linhaY) : null;
+  const tAr = prev ? prev.t : Math.abs((linhaY - ball.y) / (ball.vy || 1));
+  const ix = prev ? prev.x : ball.x + ball.vx * tAr;
+  const naMoldura = ix > GX0 - 16 && ix < GX1 + 16;
+  // já dá pra se posicionar antes de saltar, mas com tempo de reação humano
+  const chuteVindo = !ball.dono && vindo && vBola > 330 && naMoldura && tAr < 0.7;
+  // erro de leitura sorteado UMA vez por chute (se ficasse sorteando a cada quadro,
+  // a média daria zero e o goleiro viraria infalível). Diminui conforme a bola chega,
+  // mas nunca zera — daí a chance de gol. Quanto mais fácil o nível, maior o erro.
+  // A amplitude é calibrada contra o alcance do goleiro (raio ~36px): erro menor
+  // que isso nunca vira gol. Quanto mais fácil o nível, mais ele erra a leitura.
+  if (chuteVindo) {
+    if (!p.gkLendo) { p.gkLendo = 1; p.gkErro = (Math.random() - 0.5) * (128 - dif * 12); }
+  } else p.gkLendo = 0;
+  const ixLido = ix + (p.gkErro || 0) * (0.78 + 0.22 * Math.min(1, tAr / 0.55));
+  const rumoAoGol = chuteVindo && tAr < 0.4;
   if (rumoAoGol && distGol < 140) {
-    tx = clamp(ix, GX0 + 8, GX1 - 8);
+    tx = clamp(ixLido, GX0 + 8, GX1 - 8);
     ty = linhaY;
     vel = DIF[dif].gkVel * M.mult[p.side];
     // escolhe o TIPO de defesa pela distância do desvio e pela altura da bola
     const desvio = Math.abs(tx - p.x), lado = Math.sign(tx - p.x) || 1;
+    // velocidade do voo dosada pra PARAR no ponto previsto, em vez de passar direto
+    const voo = (dur) => Math.min(DIF[dif].gkVel, Math.max(70, desvio / dur));
     if (p.levant <= 0 && p.mergulhoCd <= 0) {
       if (desvio > 40) {                       // longe: mergulho de barriga, duas mãos
         p.defesa = 'duas'; p.defesaT = 0.5;
         p.mergulho = 0.24; p.mergulhoCd = 1.4;
         p.sdx = lado; p.sdy = 0;
-        p.vx = lado * DIF[dif].gkVel; p.vy = 0;
+        p.mergVel = voo(0.24);
+        p.vx = lado * p.mergVel; p.vy = 0;
         return;
       }
       if (desvio > 18) {                       // meia distância: espalma de uma mão
         p.defesa = 'uma'; p.defesaT = 0.45;
         p.mergulho = 0.18; p.mergulhoCd = 1.1;
         p.sdx = lado; p.sdy = 0;
-        p.vx = lado * DIF[dif].gkVel * 0.85; p.vy = 0;
+        p.mergVel = voo(0.18);
+        p.vx = lado * p.mergVel; p.vy = 0;
         return;
       }
       if (ball.z < 16) {                       // rasteira em cima dele: defesa de pé
@@ -1072,6 +1108,10 @@ function aiGoleiro(p, dt) {
         return;
       }
     }
+  } else if (chuteVindo) {
+    // chute a caminho mas ainda longe: corre pro ponto previsto antes de decidir o salto
+    tx = clamp(ixLido, GX0 + 6, GX1 - 6); ty = linhaY;
+    vel = DIF[dif].gkVel * 0.95;
   } else if (distGol < BOX_D && Math.hypot(ball.x - p.x, ball.y - p.y) < 160 && ball.x > BOXX0 && ball.x < BOXX1) {
     tx = ball.x; ty = ball.y; vel = DIF[dif].gkVel * 0.75;
   } else {
@@ -1099,8 +1139,9 @@ function fisicaJogador(p, dt) {
   p.mergulhoCd = Math.max(0, (p.mergulhoCd || 0) - dt);
   if (p.mergulho > 0) {        // voo lateral do goleiro
     p.mergulho -= dt;
-    p.vx = p.sdx * DIF[dif].gkVel;
-    p.vy = p.sdy * DIF[dif].gkVel;
+    const vm = p.mergVel || DIF[dif].gkVel;
+    p.vx = p.sdx * vm;
+    p.vy = p.sdy * vm;
     if (p.mergulho <= 0) {     // BARRIGADA no chão!
       p.levant = 0.5;
       p.wobble = 1;
@@ -1333,7 +1374,10 @@ function fisicaBola(dt) {
     if (espalma && ball.dono === null) {
       // espalmada: joga a bola pra fora do gol, pro lado oposto ao que ele foi
       ball.x = p.x + nx * rr; ball.y = p.y + ny * rr;
-      const paraFora = -dirDe(p.side);
+      // o gol defendido fica do lado OPOSTO ao dirDe do time, então afastar a bola
+      // dele é empurrar em +dirDe. Com o sinal invertido, o goleiro espalmava
+      // a bola para dentro do próprio gol.
+      const paraFora = dirDe(p.side);
       const lat = (p.defesa === 'uma' ? (p.sdx < 0 ? -1 : 1) : (nx < 0 ? -1 : 1));
       const forca = Math.max(280, vBola * 0.55);
       ball.vx = lat * forca * 0.75 + (Math.random() - 0.5) * 90;
@@ -3068,7 +3112,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v28', W - 10, H - 8);
+  ctx.fillText('v29', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
