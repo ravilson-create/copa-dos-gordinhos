@@ -247,7 +247,34 @@ const SELECOES = [
 {n:'Angers',s:'ANG',c1:'#111111',c2:'#ffffff',j:'Fofana:4|Boutobba:2|Mbe Soh:4|El Melali:2|Bataille:0|Ilaimaharitra:2|Allevinah:4|Bamba:4|Ninga:4|Abdelli:2'},
 {n:'Le Havre',s:'HAC',c1:'#0057b8',c2:'#ffffff',j:'Desmas:0|Diawara:4|Operi:4|Ta Bi:4|Kechta:2|Touré:4|Ndiaye:4|Casimir:4|Amougou:0|Sangante:4'},
 {n:'Paris FC',s:'PFC',c1:'#1c3f94',c2:'#c8102e',j:'Nkambadio:4|Kanté:4|N\'Doram:4|Monteiro:2|Marçal:3|Kebbal:2|Prcić:0|Ruiz:2|Geubbels:0|Youssouf:4'},
-{n:'Metz',s:'MET',c1:'#8a1f3d',c2:'#ffe000',j:'Oukidja:2|Kouyaté:4|Sabaly:4|Jallow:4|Deminguet:0|Camara:4|Kaba:4|N\'Guessan:4|El Ouazzani:2|Diallo:4'}
+{n:'Metz',s:'MET',c1:'#8a1f3d',c2:'#ffe000',j:'Oukidja:2|Kouyaté:4|Sabaly:4|Jallow:4|Deminguet:0|Camara:4|Kaba:4|N\'Guessan:4|El Ouazzani:2|Diallo:4'},
+// ================== Copa Libertadores da América (188..211) ==================
+// 8 brasileiros reaproveitam os dados já cadastrados no Brasileirão (mesmo código s)
+{n:'Flamengo',s:'FLA',c1:'#c52613',c2:'#111111',j:'Rossi:2|Varela:2|Léo Pereira:2|L\u00e9o Ortiz:2|Ayrton:3|Pulgar:2|Ger\u00f3nimo:2|Arrascaeta:1|Luiz Ara\u00fajo:3|Pedro:2|Bruno Henrique:3'},
+{n:'Palmeiras',s:'PAL',c1:'#0a7d4b',c2:'#ffffff',j:'Weverton:2|Mayke:3|Gustavo G\u00f3mez:2|Murilo:3|Piquerez:1|Ani\u00edbal:2|Ze Rafael:2|Ra\u00fal:1|Estev\u00e3o:2|Flaco L\u00f3pez:1|Rony:3'},
+{n:'Botafogo',s:'BOT',c1:'#111111',c2:'#ffffff',j:'John:3|Vitinho:2|Barboza:1|Halter:1|Alex Telles:2|Gregore:2|Marlon Freitas:3|Almada:1|Savarino:2|Luiz Henrique:2|Igor Jesus:3'},
+{n:'S\u00e3o Paulo',s:'SAO',c1:'#ffffff',c2:'#c8102e',j:'Rafael:1|Igor Vin\u00edcius:3|Arboleda:3|Alan Franco:2|Wendell:2|Bobadilla:2|Alisson:2|Lucas Moura:1|Ferreirinha:2|Calleri:1|Luciano:2'},
+{n:'Internacional',s:'INT',c1:'#c52613',c2:'#111111',j:'Rochet:1|Bruno Gomes:2|Vitao:2|Mercado:1|Bernab\u00e9:2|Thiago Maia:3|Fernando:3|Alan Patrick:2|Wesley:3|Borr\u00e9:2|Valencia:3'},
+{n:'Fortaleza',s:'FOR',c1:'#1e50a2',c2:'#c52613',j:'Jo\u00e3o Ricardo:2|Tinga:3|Titi:3|Brítez:2|Bruno Pacheco:2|Zé Welison:3|Pochettino:1|Lucero:1|Moisés:3|Marinho:3|Kervin:2'},
+{n:'Bahia',s:'BAH',c1:'#ffffff',c2:'#1e50a2',j:'Marcos Felipe:2|Arias:2|Kanu:3|Gabriel Xavier:2|Juba:3|Caio Alexandre:3|Everton Ribeiro:1|Jean Lucas:2|Ademir:3|Everaldo:2|Biel:2'},
+{n:'Corinthians',s:'CRN',c1:'#ffffff',c2:'#111111',j:'Hugo Souza:2|Matheuzinho:2|Cac\u00e1:3|Gustavo Henrique:2|Hugo:3|Raniele:2|Jos\u00e9 Mart\u00ednez:3|Garro:1|Memphis:2|Yuri Alberto:2|Romero:2'},
+// --- 16 clubes hispano-americanos ---
+{n:'River Plate',s:'RIV',c1:'#ffffff',c2:'#e2231a',j:'Armani:1|Montiel:1|Paulo D\u00edaz:2|Mart\u00ednez Quarta:1|Acu\u00f1a:2|Kranevitter:1|Enzo P\u00e9rez:1|Nacho Fern\u00e1ndez:1|Driussi:1|Colidio:1|Borja:3'},
+{n:'Boca Juniors',s:'BOC',c1:'#0a2f7a',c2:'#ffd100',j:'Brey:1|Adv\u00edncula:3|Di Lollo:1|Costa:2|Blanco:1|Battaglia:1|Paredes:1|Zen\u00f3n:2|Palacios:2|Merentiel:2|Cavani:1'},
+{n:'Racing',s:'RAC',c1:'#6ec1e4',c2:'#ffffff',j:'Arias:1|Martirena:2|Sosa:1|Colombo:1|Mura:1|Zaracho:2|Almendra:2|Nardoni:1|Solari:1|Maravilla:2|Conechny:1'},
+{n:'Estudiantes',s:'EST',c1:'#e2231a',c2:'#ffffff',j:'And\u00fajar:1|Meza:1|N\u00fa\u00f1ez:1|Lollo:1|Arzamendia:2|Ascacibar:1|Amondarain:1|Piatti:1|Castro:1|Carrillo:1|Cetr\u00e9:3'},
+{n:'V\u00e9lez Sarsfield',s:'VEL',c1:'#ffffff',c2:'#0a2f7a',j:'Marchiori:1|G\u00f3mez:2|Magall\u00e1n:1|Cufr\u00e9:1|Ortega:1|Galv\u00e1n:1|Pizzini:1|Bouzat:1|Lanzini:1|Braghieri:1|Castro:2'},
+{n:'Pe\u00f1arol',s:'PEN',c1:'#f5c518',c2:'#111111',j:'Aguerre:1|M\u00e9ndez:2|Rodr\u00edguez:1|Milans:1|Hern\u00e1ndez:2|Cristoforo:1|Silvera:2|Terans:1|Gargano:1|L. Fern\u00e1ndez:1|Cabrera:2'},
+{n:'Nacional',s:'NAC',c1:'#ffffff',c2:'#0a2f7a',j:'Mej\u00eda:2|Mill\u00e1n:1|Coates:1|Rodr\u00edguez:1|Ocampo:2|Trezza:1|Sanabria:2|Zalazar:1|Rodrigo:1|Bergessio:1|Ram\u00edrez:2'},
+{n:'Colo-Colo',s:'CCO',c1:'#ffffff',c2:'#111111',j:'Cort\u00e9s:2|Wiemberg:1|Falc\u00f3n:2|Amor:1|Suazo:2|Pavez:2|Vidal:2|Bolados:2|Palacios:2|Correa:2|Zavala:1'},
+{n:'U. de Chile',s:'UCH',c1:'#0a4da2',c2:'#e2231a',j:'Castell\u00f3n:1|Zaldivia:2|Guerrero:2|Poblete:1|Assadi:1|Palacios:2|Ar\u00e1nguiz:2|Guerra:2|Fern\u00e1ndez:1|Osorio:2|Di Yorio:1'},
+{n:'Atl\u00e9tico Nacional',s:'ATN',c1:'#0a7d4b',c2:'#ffffff',j:'Ospina:3|Rom\u00e1n:3|Aguirre:3|Candelo:4|Angulo:4|Duque:3|Zapata:3|Uribe:3|Campuzano:3|Hinestroza:4|Viveros:4'},
+{n:'Olimpia',s:'OLI',c1:'#ffffff',c2:'#111111',j:'Aguilar:2|Salcedo:2|Ortiz:2|Ben\u00edtez:2|Bareiro:2|Recalde:2|Fern\u00e1ndez:2|Dom\u00ednguez:2|Rojas:2|Riveros:2|Silva:2'},
+{n:'Cerro Porte\u00f1o',s:'CER',c1:'#0a4da2',c2:'#e2231a',j:'Esp\u00ednola:2|Arzamendia:2|Rojas:2|Piris:2|Morales:2|Villasanti:3|Aquino:2|Bogado:2|Iturbe:2|Franco:2|Dom\u00ednguez:2'},
+{n:'Libertad',s:'LIB',c1:'#111111',c2:'#ffffff',j:'Mart\u00edn Silva:1|Melgarejo:2|Alonso:2|Esp\u00ednola:2|Riveros:2|Bareiro:2|S\u00e1nchez:2|Cardozo:2|Ortiz:2|Villalba:2|Bogar\u00edn:2'},
+{n:'LDU Quito',s:'LDU',c1:'#ffffff',c2:'#111111',j:'Dom\u00ednguez:2|Qui\u00f1\u00f3nez:4|Ad\u00e9:4|Piovi:1|Quintero:3|Alzugaray:1|Villamil:3|Alvarado:3|Estrada:3|Guerrero:2|Medina:3'},
+{n:'Independiente del Valle',s:'IDV',c1:'#111111',c2:'#0a7d4b',j:'Ram\u00edrez:3|Faravelli:1|Sornoza:3|Hoyos:2|Schunke:1|Loor:4|Mercado:3|Ortiz:3|Spinelli:1|Cabezas:4|Vite:3'},
+{n:'Universitario',s:'UNI',c1:'#ffffff',c2:'#7a1f3d',j:'Britos:1|Corzo:2|Riveros:2|Di Benedetto:1|Polo:3|Ure\u00f1a:2|Concha:2|Calcaterra:2|Flores:3|Valera:2|Rivera:2'}
 ];
 const N_COPA = 48;   // seleções (0..47); clubes do Brasileirão vêm depois
 const N_EURO0 = 68, N_EURO1 = 92;   // clubes europeus (68..91)
@@ -256,6 +283,7 @@ const N_LL0 = 112, N_LL1 = 132;     // La Liga (112..131)
 const N_SA0 = 132, N_SA1 = 152;     // Serie A (132..151)
 const N_BL0 = 152, N_BL1 = 170;     // Bundesliga (152..169)
 const N_L10 = 170, N_L11 = 188;     // Ligue 1 (170..187)
+const N_LIB0 = 188, N_LIB1 = 212;   // Copa Libertadores (188..211)
 
 // categorias selecionáveis no modo Amistoso
 const CATS_AMISTOSO = [
@@ -267,6 +295,7 @@ const CATS_AMISTOSO = [
   { label: '🇮🇹 Serie A', ini: N_SA0, fim: N_SA1 },
   { label: '🇩🇪 Bundesliga', ini: N_BL0, fim: N_BL1 },
   { label: '🇫🇷 Ligue 1', ini: N_L10, fim: N_L11 },
+  { label: '🏆 Libertadores', ini: N_LIB0, fim: N_LIB1 },
 ];
 
 function parseJog(s) {
@@ -451,6 +480,7 @@ let escolhendo = 'user';
 let amistosoCat = 0;   // 0=seleções, 1=Brasileirão, 2=Champions (só no amistoso)
 let copa = null;
 let champions = null;
+let libertadores = null;
 let M = null;
 let players = [], ctrl = null;
 let arbitro = null;
@@ -1901,6 +1931,8 @@ function fimDePartida() {
   if (modo === 'liga') { registrarLiga(ga, gb); tela = 'liga'; return; }
   if (modo === 'champions') {
     if (champions.fase === 'grupos') { registrarGrupoChampions(ga, gb); return; }
+  } else if (modo === 'libertadores') {
+    if (libertadores.fase === 'grupos') { registrarGrupoLib(ga, gb); return; }
   } else if (copa.fase === 'grupos') { registrarGrupo(ga, gb); return; }
   if (ga === gb) {
     if (!M.prorrog) {          // tempo de acréscimos do mata-mata
@@ -1921,6 +1953,7 @@ function fimDePartida() {
 // dispara o avanço no torneio certo (Copa ou Champions) conforme o modo ativo
 function avancarFaseAtual(venceuUser) {
   if (modo === 'champions') avancarMataMataChampions(venceuUser);
+  else if (modo === 'libertadores') avancarMataMataLib(venceuUser);
   else avancarMataMata(venceuUser);
 }
 
@@ -2019,9 +2052,12 @@ function avancarMataMata(venceuUser) { avancarMataMataT(copa, venceuUser); tela 
 
 // ---- Liga dos Campeões ----
 function iniciarChampions() { champions = novoTorneio(N_EURO0, N_EURO1); tela = 'champions'; }
+function iniciarLibertadores() { libertadores = novoTorneio(N_LIB0, N_LIB1); tela = 'libertadores'; }
 function advDaRodadaChampions() { return advDaRodadaT(champions); }
 function registrarGrupoChampions(ga, gb) { registrarGrupoT(champions, ga, gb); tela = 'champions'; }
+function registrarGrupoLib(ga, gb) { registrarGrupoT(libertadores, ga, gb); tela = 'libertadores'; }
 function avancarMataMataChampions(venceuUser) { avancarMataMataT(champions, venceuUser); tela = 'champions'; }
+function avancarMataMataLib(venceuUser) { avancarMataMataT(libertadores, venceuUser); tela = 'libertadores'; }
 
 // ---------------- Partículas ----------------
 function atualizarParticulas(dt) {
@@ -3102,17 +3138,18 @@ function drawMenu() {
   DIF.forEach((d, i) => {
     botao(60 + i * 145, 390, 130, 46, d.nome, () => { dif = i; gravarSave(); }, i === dif ? '#e07b00' : '#2a6f4e');
   });
-  botao(90, 460, 360, 54, '🤝 AMISTOSO', () => { modo = 'amistoso'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
-  botao(90, 522, 360, 54, '🏆 COPA DO MUNDO 2026', () => { modo = 'copa'; escolhendo = 'user'; tela = 'selecao'; });
-  botao(90, 584, 360, 54, '🏟️ LIGAS NACIONAIS', () => { tela = 'ligas'; });
-  botao(90, 646, 360, 54, '⭐ LIGA DOS CAMPEÕES', () => { modo = 'champions'; escolhendo = 'user'; tela = 'selecao'; });
-  botao(90, 708, 360, 54, '🥅 TREINO DE PÊNALTIS', () => { modo = 'treino'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
+  botao(90, 448, 360, 48, '🤝 AMISTOSO', () => { modo = 'amistoso'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
+  botao(90, 502, 360, 48, '🏆 COPA DO MUNDO 2026', () => { modo = 'copa'; escolhendo = 'user'; tela = 'selecao'; });
+  botao(90, 556, 360, 48, '🏟️ LIGAS NACIONAIS', () => { tela = 'ligas'; });
+  botao(90, 610, 360, 48, '⭐ LIGA DOS CAMPEÕES', () => { modo = 'champions'; escolhendo = 'user'; tela = 'selecao'; });
+  botao(90, 664, 360, 48, '🏆 LIBERTADORES DA AMÉRICA', () => { modo = 'libertadores'; escolhendo = 'user'; tela = 'selecao'; }, '#1e7a3d');
+  botao(90, 718, 360, 48, '🥅 TREINO DE PÊNALTIS', () => { modo = 'treino'; escolhendo = 'user'; amistosoCat = 0; tela = 'selecao'; });
   ctx.font = '13px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.6)';
   ctx.fillText('Você joga sempre contra o computador', W / 2, 786);
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v29', W - 10, H - 8);
+  ctx.fillText('v30', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
@@ -3123,6 +3160,7 @@ function faixaTimes() {   // [ini, fim) de índices conforme o modo
   }
   if (modo === 'liga') return [LIGAS[ligaId].ini, LIGAS[ligaId].fim];
   if (modo === 'champions') return [N_EURO0, N_EURO1];
+  if (modo === 'libertadores') return [N_LIB0, N_LIB1];
   return [0, N_COPA];
 }
 
@@ -3147,7 +3185,7 @@ function drawSelecao() {
   fundoMenu();
   ctx.textAlign = 'center';
   ctx.font = 'bold 20px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
-  const clubeLike = modo === 'liga' || modo === 'champions' || ((modo === 'amistoso' || modo === 'treino') && amistosoCat > 0);
+  const clubeLike = modo === 'liga' || modo === 'champions' || modo === 'libertadores' || ((modo === 'amistoso' || modo === 'treino') && amistosoCat > 0);
   const titulo = clubeLike
     ? (escolhendo === 'user' ? 'Escolha o seu clube' : 'Escolha o adversário')
     : (escolhendo === 'user' ? 'Escolha a sua seleção' : 'Escolha o adversário');
@@ -3196,6 +3234,7 @@ function escolheu(i) {
     selUser = i;
     if (modo === 'copa') iniciarCopa();
     else if (modo === 'champions') iniciarChampions();
+    else if (modo === 'libertadores') iniciarLibertadores();
     else if (modo === 'liga') iniciarLiga(ligaId);
     else escolhendo = 'adv';
   } else {
@@ -3276,14 +3315,16 @@ function drawCopa() {
   botao(W / 2 - 60, H - 70, 120, 44, 'Menu', () => { tela = 'menu'; }, '#555');
 }
 
-function drawChampions() {
+function drawChampions() { drawTorneioCont(champions, '\u2b50 UEFA Champions League dos Gordinhos'); }
+function drawLibertadores() { drawTorneioCont(libertadores, '\ud83c\udfc6 Copa Libertadores dos Gordinhos'); }
+function drawTorneioCont(t, titulo) {
   fundoMenu();
   ctx.textAlign = 'center';
   ctx.font = 'bold 24px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
-  ctx.fillText('⭐ UEFA Champions League dos Gordinhos', W / 2, 46);
-  if (champions.fim === 'campeao') {
-    if (!champions.festejado) {
-      champions.festejado = true;
+  ctx.fillText(titulo, W / 2, 46);
+  if (t.fim === 'campeao') {
+    if (!t.festejado) {
+      t.festejado = true;
       explodirFesta(160, true);
       somGol(); somTorcida(0.3, 3, 1200);
     }
@@ -3304,7 +3345,7 @@ function drawChampions() {
     botao(W / 2 - 110, 520, 220, 56, 'Voltar ao menu', () => { tela = 'menu'; });
     return;
   }
-  if (champions.fim === 'eliminado') {
+  if (t.fim === 'eliminado') {
     ctx.font = '70px Arial'; ctx.fillText('😭', W / 2, 260);
     ctx.font = 'bold 26px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
     ctx.fillText(SELECOES[selUser].n + ' caiu na Champions...', W / 2, 340);
@@ -3313,11 +3354,11 @@ function drawChampions() {
     botao(W / 2 - 110, 520, 220, 56, 'Voltar ao menu', () => { tela = 'menu'; });
     return;
   }
-  if (champions.fase === 'grupos') {
+  if (t.fase === 'grupos') {
     ctx.font = 'bold 19px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
-    ctx.fillText('Seu grupo — rodada ' + (champions.rodada + 1) + ' de 3', W / 2, 100);
-    const ordem = (champions.ordem || champions.grupo).slice().sort((a, b) => {
-      const A = champions.tab[a], B = champions.tab[b];
+    ctx.fillText('Seu grupo — rodada ' + (t.rodada + 1) + ' de 3', W / 2, 100);
+    const ordem = (t.ordem || t.grupo).slice().sort((a, b) => {
+      const A = t.tab[a], B = t.tab[b];
       return (B.pts - A.pts) || ((B.gp - B.gc) - (A.gp - A.gc)) || (B.gp - A.gp);
     });
     ctx.font = 'bold 13px "Segoe UI",Arial'; ctx.textAlign = 'left'; ctx.fillStyle = '#9fc';
@@ -3325,7 +3366,7 @@ function drawChampions() {
     ctx.textAlign = 'right';
     ctx.fillText('J', 330, 140); ctx.fillText('SG', 390, 140); ctx.fillText('PTS', 460, 140);
     ordem.forEach((g, i) => {
-      const t = champions.tab[g], y = 175 + i * 42;
+      const t = t.tab[g], y = 175 + i * 42;
       ctx.fillStyle = g === selUser ? 'rgba(255,209,102,0.18)' : 'rgba(255,255,255,0.06)';
       roundRect(55, y - 26, 420, 36, 8); ctx.fill();
       ctx.fillStyle = SELECOES[g].c1;
@@ -3341,7 +3382,7 @@ function drawChampions() {
       ctx.fillText(t.pts, 460, y - 3);
     });
     ctx.textAlign = 'center';
-    if (champions.rodada < 3) {
+    if (t.rodada < 3) {
       const adv = advDaRodadaChampions();
       ctx.font = 'bold 18px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
       ctx.fillText('Próximo jogo: ' + SELECOES[selUser].n + ' × ' + SELECOES[adv].n, W / 2, 420);
@@ -3349,13 +3390,13 @@ function drawChampions() {
     }
   } else {
     ctx.font = 'bold 22px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
-    ctx.fillText(FASES[champions.fase], W / 2, 160);
-    const a = SELECOES[selUser], b = SELECOES[champions.adv];
+    ctx.fillText(FASES[t.fase], W / 2, 160);
+    const a = SELECOES[selUser], b = SELECOES[t.adv];
     ctx.font = 'bold 26px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
     ctx.fillText(a.n + '  ×  ' + b.n, W / 2, 260);
     ctx.font = '15px "Segoe UI",Arial'; ctx.fillStyle = '#cde';
     ctx.fillText('Mata-mata: empate vai para os pênaltis!', W / 2, 310);
-    botao(W / 2 - 130, 380, 260, 58, '⚽ JOGAR PARTIDA', () => { jogoPend = { a: selUser, b: champions.adv }; tela = 'uniforme'; }, '#e07b00');
+    botao(W / 2 - 130, 380, 260, 58, '⚽ JOGAR PARTIDA', () => { jogoPend = { a: selUser, b: t.adv }; tela = 'uniforme'; }, '#e07b00');
   }
   botao(W / 2 - 60, H - 70, 120, 44, 'Menu', () => { tela = 'menu'; }, '#555');
 }
@@ -3386,6 +3427,7 @@ function draw() {
   else if (tela === 'selecao') drawSelecao();
   else if (tela === 'copa') drawCopa();
   else if (tela === 'champions') drawChampions();
+  else if (tela === 'libertadores') drawLibertadores();
   else if (tela === 'liga') drawLiga();
   else if (tela === 'ligas') drawLigas();
   else if (tela === 'uniforme') drawUniforme();
@@ -3738,6 +3780,10 @@ function abandonarPartida() {
     if (champions.fase === 'grupos') registrarGrupoChampions(0, 2);   // W.O.: derrota
     else avancarMataMataChampions(false);
     M = null; tela = 'champions';
+  } else if (modo === 'libertadores' && libertadores && !libertadores.fim) {
+    if (libertadores.fase === 'grupos') registrarGrupoLib(0, 2);   // W.O.: derrota
+    else avancarMataMataLib(false);
+    M = null; tela = 'libertadores';
   } else if (modo === 'liga' && liga && !liga.fim) {
     registrarLiga(0, 2); M = null; tela = 'liga';
   } else {
@@ -3899,6 +3945,53 @@ function kitCpu(iA, kA, iB) {
   if (d0 >= 140) return 0;
   return corDist(minha, kit(iB, 1)[0]) > d0 ? 1 : 0;
 }
+
+// ================== Copa Libertadores: dados dos 16 clubes hispano-americanos ==================
+Object.assign(EXTRA, {
+RIV:{t:'Gallardo:1',r:'Ledesma:1|Casco:1|Aliendro:1|Sol\u00e1ri:1|Rond\u00f3n:2'},
+BOC:{t:'\u00danai:1',r:'Marchesín:1|Figal:1|Medina:2|Janson:1|Milton:2'},
+RAC:{t:'Costas:1',r:'Arias:1|Rojas:2|Quintero:2|Vietto:1|Balboa:1'},
+EST:{t:'Dom\u00ednguez:1',r:'Mansilla:1|Rogel:1|Sosa:1|Vel\u00e1zquez:2|Guich:1'},
+VEL:{t:'Barros Schelotto:1',r:'Dominguez:1|Perrone:1|Gordillo:1|Bou:1|Vare:2'},
+PEN:{t:'Aguirre:1',r:'Rossi:1|Olivera:1|Da Silva:2|Sequeira:1|Batista:2'},
+NAC:{t:'Rec\u00f3ba:1',r:'Silva:1|Sanabria:2|Ruben:2|Lozano:1|Bergessio:1'},
+CCO:{t:'Almir\u00f3n:2',r:'De Paul:2|Opazo:2|Gil:2|Lucero:2|Aguilera:2'},
+UCH:{t:'\u00c1lvarez:1',r:'Salinas:2|Castro:2|Hormaz\u00e1bal:2|Larrivey:1|Mateos:1'},
+ATN:{t:'Guti\u00e9rrez:3',r:'Mosquera:4|Arias:3|Mena:4|Rodallega:4|Torres:3'},
+OLI:{t:'Almeida:2',r:'Rodr\u00edguez:2|Cardozo:2|Ram\u00edrez:2|Bareiro:2|Sanabria:2'},
+CER:{t:'Ram\u00edrez:2',r:'Rojas:2|Gonz\u00e1lez:2|Le\u00f3n:2|Cristaldo:2|Ben\u00edtez:2'},
+LIB:{t:'Sanguinetti:1',r:'Barreto:2|Vera:2|Ferreira:2|Ram\u00edrez:2|Ort\u00edz:2'},
+LDU:{t:'Anselmi:1',r:'Valle:4|Guerrero:2|Cornejo:3|Ju\u00e1rez:3|Ramírez:3'},
+IDV:{t:'L\u00f3pez:1',r:'Valencia:4|Ang\u00falo:4|Herrera:3|Cort\u00e9s:3|Preciado:4'},
+UNI:{t:'Compagnucci:1',r:'Romero:2|Murrugarra:2|Quispe:3|Guzm\u00e1n:2|Barreto:2'}
+});
+// 2\u00ba uniforme
+Object.assign(KIT2, {
+RIV:['#111111','#e2231a'],BOC:['#ffd100','#0a2f7a'],RAC:['#0a2f7a','#ffffff'],
+EST:['#ffffff','#e2231a'],VEL:['#0a2f7a','#ffffff'],PEN:['#111111','#f5c518'],
+NAC:['#0a2f7a','#ffffff'],CCO:['#111111','#ffffff'],UCH:['#ffffff','#0a4da2'],
+ATN:['#ffffff','#0a7d4b'],OLI:['#111111','#ffffff'],CER:['#ffffff','#0a4da2'],
+LIB:['#ffffff','#111111'],LDU:['#111111','#ffffff'],IDV:['#0a7d4b','#111111'],
+UNI:['#7a1f3d','#ffffff']
+});
+// escudo = faixas nas cores do clube
+Object.assign(FLAGS, {
+RIV:['d','#ffffff','#e2231a'],BOC:['h','#0a2f7a','#ffd100','#0a2f7a'],RAC:['v','#6ec1e4','#ffffff','#6ec1e4'],
+EST:['v','#e2231a','#ffffff','#e2231a'],VEL:['d','#ffffff','#0a2f7a'],PEN:['v','#f5c518','#111111','#f5c518'],
+NAC:['h','#ffffff','#0a2f7a','#e2231a'],CCO:['d','#ffffff','#111111'],UCH:['h','#0a4da2','#e2231a','#0a4da2'],
+ATN:['v','#0a7d4b','#ffffff','#0a7d4b'],OLI:['d','#ffffff','#111111'],CER:['v','#0a4da2','#e2231a','#0a4da2'],
+LIB:['v','#111111','#ffffff','#111111'],LDU:['d','#ffffff','#111111'],IDV:['h','#111111','#0a7d4b','#111111'],
+UNI:['h','#ffffff','#7a1f3d','#ffffff']
+});
+Object.assign(FORCA, {
+RIV:4.5, BOC:4.5, RAC:4, EST:3.5, VEL:3.5, PEN:3.5, NAC:3.5, CCO:3.5,
+UCH:3.5, ATN:3.5, OLI:3, CER:3, LIB:3, LDU:3.5, IDV:4, UNI:3
+});
+Object.assign(PADRAO, {
+RIV:'banda', BOC:'faixa', RAC:'listras', EST:'listras', VEL:'faixa',
+PEN:'listras', NAC:'liso', CCO:'liso', UCH:'liso', ATN:'listras',
+OLI:'liso', CER:'listras', LIB:'listras', LDU:'liso', IDV:'liso', UNI:'faixa'
+});
 
 // ================== Tela de escolha de uniforme ==================
 function drawUniforme() {
