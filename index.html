@@ -3149,7 +3149,7 @@ function drawMenu() {
   ctx.fillText('PC: setas/WASD · ESPAÇO chuta · X passa · SHIFT corre', W / 2, 808);
   ctx.fillText('Celular: joystick à esquerda, botões à direita', W / 2, 828);
   ctx.font = '11px "Segoe UI",Arial'; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.textAlign = 'right';
-  ctx.fillText('v30', W - 10, H - 8);
+  ctx.fillText('v31', W - 10, H - 8);
   ctx.textAlign = 'center';
 }
 
@@ -3348,9 +3348,9 @@ function drawTorneioCont(t, titulo) {
   if (t.fim === 'eliminado') {
     ctx.font = '70px Arial'; ctx.fillText('😭', W / 2, 260);
     ctx.font = 'bold 26px "Segoe UI",Arial'; ctx.fillStyle = '#fff';
-    ctx.fillText(SELECOES[selUser].n + ' caiu na Champions...', W / 2, 340);
+    ctx.fillText(SELECOES[selUser].n + ' caiu fora...', W / 2, 340);
     ctx.font = '17px "Segoe UI",Arial'; ctx.fillStyle = '#cde';
-    ctx.fillText('Sobrou a Champions do buffet livre.', W / 2, 385);
+    ctx.fillText('Sobrou o torneio do buffet livre.', W / 2, 385);
     botao(W / 2 - 110, 520, 220, 56, 'Voltar ao menu', () => { tela = 'menu'; });
     return;
   }
@@ -3366,7 +3366,7 @@ function drawTorneioCont(t, titulo) {
     ctx.textAlign = 'right';
     ctx.fillText('J', 330, 140); ctx.fillText('SG', 390, 140); ctx.fillText('PTS', 460, 140);
     ordem.forEach((g, i) => {
-      const t = t.tab[g], y = 175 + i * 42;
+      const lin = t.tab[g], y = 175 + i * 42;
       ctx.fillStyle = g === selUser ? 'rgba(255,209,102,0.18)' : 'rgba(255,255,255,0.06)';
       roundRect(55, y - 26, 420, 36, 8); ctx.fill();
       ctx.fillStyle = SELECOES[g].c1;
@@ -3377,13 +3377,13 @@ function drawTorneioCont(t, titulo) {
       ctx.textAlign = 'left';
       ctx.fillText(SELECOES[g].n, 105, y - 3);
       ctx.textAlign = 'right';
-      ctx.fillText(t.j, 330, y - 3);
-      ctx.fillText(t.gp - t.gc, 390, y - 3);
-      ctx.fillText(t.pts, 460, y - 3);
+      ctx.fillText(lin.j, 330, y - 3);
+      ctx.fillText(lin.gp - lin.gc, 390, y - 3);
+      ctx.fillText(lin.pts, 460, y - 3);
     });
     ctx.textAlign = 'center';
     if (t.rodada < 3) {
-      const adv = advDaRodadaChampions();
+      const adv = advDaRodadaT(t);
       ctx.font = 'bold 18px "Segoe UI",Arial'; ctx.fillStyle = '#ffd166';
       ctx.fillText('Próximo jogo: ' + SELECOES[selUser].n + ' × ' + SELECOES[adv].n, W / 2, 420);
       botao(W / 2 - 130, 460, 260, 58, '⚽ JOGAR PARTIDA', () => { jogoPend = { a: selUser, b: adv }; tela = 'uniforme'; }, '#e07b00');
